@@ -39,7 +39,7 @@ export default async function handler(req, res) {
             content: topic
           }
         ],
-        temperature: 0.8
+        temperature: 0.8,
         max_tokens: 1200
       }),
     });
