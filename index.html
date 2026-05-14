@@ -92,12 +92,9 @@ async function generateContent() {
       <p>${data.hashtags.join(" ")}</p>
       `;
 
-  } catch(error) {
-
-    document.getElementById("result").innerHTML =
-      "Ошибка генерации";
-
-  }
+} catch(error) {
+  document.getElementById("result").innerHTML =
+    "Ошибка: " + error.message;
 }
 function copyResult() {
 const text = document.getElementById("result").innerText;
