@@ -98,61 +98,60 @@
 
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
-  <script>
-    async function generateContent() {
-      const topic = document.getElementById("topic").value;
-      const result = document.getElementById("result");
-      const button = document.getElementById("generateBtn");
+ <script>
+async function generateContent() {
+  const topic = document.getElementById("topic").value;
+  const result = document.getElementById("result");
+  const button = document.getElementById("generateBtn");
 
-      if (!topic.trim()) {
-        result.innerHTML = "⚠️ Напиши тему сначала.";
-        return;
-      }
+  if (!topic.trim()) {
+    result.innerHTML = "⚠️ Напиши тему сначала.";
+    return;
+  }
 
-      result.innerHTML = "⏳ Генерирую вирусный контент...";
-      button.disabled = true;
-      button.innerText = "⏳ Generating...";
+  result.innerHTML = "⏳ Генерирую вирусный контент...";
+  button.disabled = true;
+  button.innerText = "⏳ Generating...";
 
-      try {
-        const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ topic: topic })
-        });
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ topic: topic })
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (!response.ok) {
-          result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
-          return;
-        }
-
-        result.innerHTML =
-          "🔥 " + data.title + "\n\n" +
-          data.body + "\n\n" +
-          data.hashtags.join(" ");
-
-      } catch (error) {
-        result.innerHTML = "❌ Ошибка: " + error.message;
-      } finally {
-        button.disabled = false;
-        button.innerText = "🚀 Generate Viral Content";
-      }
+    if (!response.ok) {
+      result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+      return;
     }
 
-    function copyResult() {
-      const text = document.getElementById("result").innerText;
+    result.innerHTML =
+      "🔥 " + data.title + "<br><br>" +
+      data.body + "<br><br>" +
+      data.hashtags.join(" ");
+  } catch (error) {
+    result.innerHTML = "❌ Ошибка: " + error.message;
+  } finally {
+    button.disabled = false;
+    button.innerText = "🚀 Generate Viral Content";
+  }
+}
 
-      if (!text.trim()) {
-        alert("Сначала сгенерируй текст");
-        return;
-      }
+function copyResult() {
+  const text = document.getElementById("result").innerText;
 
-      navigator.clipboard.writeText(text);
-      alert("Copied!");
-    }
-  </script>
+  if (!text.trim()) {
+    alert("Сначала сгенерируй текст");
+    return;
+  }
+
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+</script>
 </body>
 </html>
