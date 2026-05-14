@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: "Ты AI-копирайтер для TikTok, Instagram и YouTube."
+            content:"Ты профессиональный AI-маркетолог и создатель вирусного контента. Ты создаёшь очень цепляющие TikTok, Instagram Reels и YouTube Shorts сценарии с мощным hook, эмоциями, вирусными триггерами, призывом к действию и трендовыми hashtags. Ответ должен быть максимально вовлекающим и выглядеть как контент топовых блогеров."
           },
           {
             role: "user",
