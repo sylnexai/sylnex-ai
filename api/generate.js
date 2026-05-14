@@ -31,8 +31,8 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     res.status(200).json({
-      title: "AI написал пост",
-      body: data.choices[0].message.content,
+      title: "🔥 10 Viral Content Ideas",
+     body: "1. " + data.choices[0].message.content,
       hashtags: ["#AI", "#Content", "#TikTok"]
     });
 
