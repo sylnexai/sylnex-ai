@@ -45,8 +45,8 @@ input: [
     const data = await response.json();
 
     const content =
-      data?.choices?.[0]?.message?.content ||
-      "AI не смог сгенерировать ответ";
+  data.output?.[0]?.content?.[0]?.text ||
+  "AI не смог сгенерировать ответ";
 
     return res.status(200).json({
       title: "🔥 10 Viral Content Ideas",
