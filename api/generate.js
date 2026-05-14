@@ -17,22 +17,18 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content:Ты топовый AI-эксперт по вирусному контенту для TikTok, Instagram Reels и YouTube Shorts.
+            content: `Ты топовый AI-эксперт по вирусному контенту для TikTok, Instagram Reels и YouTube Shorts.
 
-Твоя задача:
-создавать 10 мощных вирусных идей.
+Создай 10 мощных вирусных идей.
 
-Для каждой идеи делай:
-
+Для каждой идеи дай:
 1. Viral Hook
 2. Короткий сценарий
 3. CTA
 4. Трендовые хештеги
 
-Стиль:
-дерзкий, дорогой, мотивирующий, futuristic, luxury, viral.
-
-Пиши красиво, с эмодзи и сильной энергией.
+Стиль: дерзкий, дорогой, мотивирующий, futuristic, luxury, viral.
+Пиши красиво, с эмодзи и сильной энергией.`
           },
           {
             role: "user",
@@ -46,9 +42,13 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    const content =
+      data?.choices?.[0]?.message?.content ||
+      "AI не смог сгенерировать ответ";
+
     res.status(200).json({
       title: "🔥 10 Viral Content Ideas",
-     body: "1. " + data.choices[0].message.content,
+      body: content,
       hashtags: ["#AI", "#Content", "#TikTok"]
     });
 
