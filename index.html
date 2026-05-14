@@ -2,105 +2,157 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sylnex AI</title>
-<!-- update -->
+
   <style>
-    body{
-      background:black;
-      color:white;
-      font-family:Arial;
-      text-align:center;
-      padding-top:80px;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #10291d, #050505 60%);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
     }
 
-    textarea{
-      width:300px;
-      height:120px;
-      border-radius:10px;
-      padding:10px;
+    h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
     }
 
-    button{
-      padding:15px 30px;
-      background:#00ff99;
-      border:none;
-      border-radius:10px;
-      font-size:18px;
-      cursor:pointer;
-      margin-top:10px;
+    .green {
+      color: #00ff99;
     }
 
-    #result{
-      margin-top:30px;
-      color:#00ff99;
-      white-space:pre-line;
-      width:80%;
-      margin-left:auto;
-      margin-right:auto;
+    textarea {
+      width: 90%;
+      max-width: 520px;
+      height: 130px;
+      border-radius: 16px;
+      border: none;
+      padding: 18px;
+      font-size: 16px;
+      margin-top: 20px;
+      outline: none;
+      resize: none;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 16px 34px;
+      border: none;
+      border-radius: 14px;
+      background: #00ff99;
+      color: #06150f;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(0,255,153,0.4);
+    }
+
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    #result {
+      margin: 35px auto;
+      max-width: 850px;
+      color: #00ff99;
+      font-size: 17px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 25px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,153,0.25);
+    }
+
+    .small {
+      opacity: 0.8;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
+  <h1>🚀 Sylnex AI</h1>
+  <h3 class="green">AI Powered by OpenAI GPT</h3>
+  <p>AI Content Factory</p>
 
-<h1>🚀 Sylnex AI</h1><p style="color:#00ff99;">
-AI Powered by OpenAI GPT
-</p>  
-<p>AI Content Factory</p>
+  <textarea id="topic" placeholder="Напиши тему..."></textarea>
+  <br />
 
-<textarea id="topic" maxlength="500"
-placeholder="Напиши тему..."></textarea>
+  <button onclick="generateContent()" id="generateBtn">
+    🚀 Generate Viral Content
+  </button>
 
-<br><br>
+  <br />
 
-<button onclick="generateContent()" id="generateBtn">
-🚀 Generate Viral Content
-</button>
+  <button onclick="copyResult()">
+    📋 Copy Text
+  </button>
 
-<div id="result"></div>
+  <div id="result"></div>
 
-<button onclick="copyResult()">
-📋 Copy Text
-</button>
+  <p class="small">#AI #Content #TikTok #Sylnex</p>
 
-<script>
-async function generateContent() {
-alert("Кнопка работает");
-  const topic =
-    document.getElementById("topic").value;
+  <script>
+    async function generateContent() {
+      const topic = document.getElementById("topic").value;
+      const result = document.getElementById("result");
+      const button = document.getElementById("generateBtn");
 
-  document.getElementById("result").innerHTML =
-    "Генерирую...";
+      if (!topic.trim()) {
+        result.innerHTML = "⚠️ Напиши тему сначала.";
+        return;
+      }
 
-  try {
+      result.innerHTML = "⏳ Генерирую вирусный контент...";
+      button.disabled = true;
+      button.innerText = "⏳ Generating...";
 
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ topic })
-    });
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ topic: topic })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    document.getElementById("result").innerHTML =
-      `
-      <h2>${data.title}</h2>
-      <p>${data.body}</p>
-      <p>${data.hashtags.join(" ")}</p>
-      `;
+        if (!response.ok) {
+          result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+          return;
+        }
 
-} catch(error) {
-  document.getElementById("result").innerHTML =
-    "Ошибка: " + error.message;
-}
-function copyResult() {
-const text = document.getElementById("result").innerText;
-navigator.clipboard.writeText(text);
-alert("Copied!");
-}</script>
+        result.innerHTML =
+          "🔥 " + data.title + "\n\n" +
+          data.body + "\n\n" +
+          data.hashtags.join(" ");
 
+      } catch (error) {
+        result.innerHTML = "❌ Ошибка: " + error.message;
+      } finally {
+        button.disabled = false;
+        button.innerText = "🚀 Generate Viral Content";
+      }
+    }
+
+    function copyResult() {
+      const text = document.getElementById("result").innerText;
+
+      if (!text.trim()) {
+        alert("Сначала сгенерируй текст");
+        return;
+      }
+
+      navigator.clipboard.writeText(text);
+      alert("Copied!");
+    }
+  </script>
 </body>
 </html>
