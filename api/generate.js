@@ -1,3 +1,16 @@
+import admin from "firebase-admin";
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
+  });
+}
+
+const db = admin.firestore();
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -44,9 +57,18 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    const content =
-      data.output?.[0]?.content?.[0]?.text ||
-      "AI не смог сгенерировать ответ";
+      const content =
+  data.output?.[0]?.content?.[0]?.text ||
+  "AI не смог сгенерировать ответ";
+
+    await db.collection("generations").add({
+  topic,
+  platform,
+  language,
+  contentType,
+  result: content,
+  createdAt: new Date(),
+});
 
     return res.status(200).json({
       title: "🔥 10 Viral Content Ideas",
