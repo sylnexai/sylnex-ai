@@ -21,14 +21,23 @@ export default async function handler(req, res) {
   try {
    const { topic, platform, language, contentType } = req.body;
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1-mini",
+   const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+  },
+  body: JSON.stringify({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "user",
+        content: `Создай вирусный TikTok контент на тему: ${topic}`
+      }
+    ],
+    temperature: 0.9
+  })
+});
         input: `Создай 10 вирусных идей для ${platform} на тему: ${topic}.
         Отвечай только на языке ${language}.
 
