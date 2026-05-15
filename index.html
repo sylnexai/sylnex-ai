@@ -136,6 +136,11 @@
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
  <script>
+   async function loadHistory() {
+  const history = document.getElementById("history");
+
+  history.innerHTML = "⏳ Loading history...";
+}
 async function generateContent() {
   const topic = document.getElementById("topic").value;
   const result = document.getElementById("result");
