@@ -205,8 +205,8 @@ console.log(text);
 let data;
 
 try {
-  data = JSON.parse(text);
-catch {
+    data = JSON.parse(text);
+} catch {
     result.innerHTML = "❌ Ошибка ответа API";
     return;
 }
