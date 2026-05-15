@@ -136,10 +136,42 @@
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
  <script>
-   async function loadHistory() {
-  const history = document.getElementById("history");
+ async function loadHistory() {
+    const history = document.getElementById("history");
 
-  history.innerHTML = "⏳ Loading history...";
+    history.innerHTML = "⏳ Loading history...";
+
+    try {
+        const response = await fetch("/api/history");
+
+        const data = await response.json();
+
+        if (!data.history || data.history.length === 0) {
+            history.innerHTML = "❌ История пуста";
+            return;
+        }
+
+        history.innerHTML = "";
+
+        data.history.forEach(item => {
+            history.innerHTML += `
+                <div style="
+                    background: rgba(255,255,255,0.08);
+                    padding: 15px;
+                    margin-top: 15px;
+                    border-radius: 12px;
+                    text-align: left;
+                ">
+                    <b>${item.title}</b><br><br>
+                    ${item.body}<br><br>
+                    ${item.hashtags.join(" ")}
+                </div>
+            `;
+        });
+
+    } catch (error) {
+        history.innerHTML = "❌ Ошибка загрузки истории";
+    }
 }
 async function generateContent() {
   const topic = document.getElementById("topic").value;
