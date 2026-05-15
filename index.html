@@ -206,10 +206,9 @@ let data;
 
 try {
   data = JSON.parse(text);
-} catch {
-  return res.status(500).json({
-    error: text
-  });
+catch {
+    result.innerHTML = "❌ Ошибка ответа API";
+    return;
 }
 
     if (!response.ok) {
