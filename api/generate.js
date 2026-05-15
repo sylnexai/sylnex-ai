@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-   const { topic, platform } = req.body;
+   const { topic, platform, language, contentType } = req.body;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -17,6 +17,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "gpt-4.1-mini",
         input: `Создай 10 вирусных идей для ${platform} на тему: ${topic}.
+        Отвечай только на языке ${language}.
 
 Если платформа TikTok:
 — делай максимально вирусный стиль
