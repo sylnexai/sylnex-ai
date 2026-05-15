@@ -89,7 +89,19 @@
   <option value="Instagram Reels">Instagram Reels</option>
   <option value="YouTube Shorts">YouTube Shorts</option>
 </select>
-
+<select id="language">
+  <option value="Русский">Русский</option>
+  <option value="English">English</option>
+  <option value="Deutsch">Deutsch</option>
+  <option value="Français">Français</option>
+  <option value="Español">Español</option>
+  <option value="Italiano">Italiano</option>
+  <option value="Português">Português</option>
+  <option value="العربية">العربية</option>
+  <option value="Türkçe">Türkçe</option>
+  <option value="中文">中文</option>
+  <option value="日本語">日本語</option>
+</select>
   <button onclick="generateContent()" id="generateBtn">
     🚀 Generate Viral Content
   </button>
@@ -109,6 +121,7 @@ async function generateContent() {
   const topic = document.getElementById("topic").value;
   const result = document.getElementById("result");
   const platform = document.getElementById("platform").value;
+  const language = document.getElementById("language").value;
   const button = document.getElementById("generateBtn");
 
   if (!topic.trim()) {
@@ -126,7 +139,7 @@ async function generateContent() {
       headers: {
         "Content-Type": "application/json"
       },
-     body: JSON.stringify({ topic, platform })
+     body: JSON.stringify({ topic, platform, language })
     });
 
     const text = await response.text();
