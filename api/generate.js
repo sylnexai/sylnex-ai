@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4.1-mini",
-        input: `Создай 10 вирусных идей для TikTok и Reels на тему: ${topic}`
+        input: `Создай 10 вирусных идей для ${platform} на тему: ${topic}`
       })
     });
 
