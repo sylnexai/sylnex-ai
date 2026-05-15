@@ -58,14 +58,14 @@ try {
   "AI не смог сгенерировать ответ";
 
     return res.status(200).json({
-      title: "🔥 10 Viral Content Ideas",
-      body: content,
-      hashtags: ["#AI", "#Content", "#TikTok"]
-    });
+  title: "🔥 10 Viral Content Ideas",
+  body: content,
+  hashtags: ["#AI", "#Content", "#TikTok"]
+});
 
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message
-    });
-  }
+} catch (error) {
+  return res.status(500).json({
+    error: error.message
+  });
+}
 }
