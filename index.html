@@ -129,6 +129,7 @@ async function generateContent() {
   const result = document.getElementById("result");
   const platform = document.getElementById("platform").value;
   const language = document.getElementById("language").value;
+  const contentType = document.getElementById("contentType").value;
   const button = document.getElementById("generateBtn");
 
   if (!topic.trim()) {
@@ -146,7 +147,7 @@ async function generateContent() {
       headers: {
         "Content-Type": "application/json"
       },
-     body: JSON.stringify({ topic, platform, language })
+     body: JSON.stringify({ topic, platform, language, contentType })
     });
 
     const text = await response.text();
