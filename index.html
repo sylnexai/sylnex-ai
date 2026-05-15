@@ -125,7 +125,7 @@ async function generateContent() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ topic: topic })
+     body: JSON.stringify({ topic, platform })
     });
 
     const text = await response.text();
