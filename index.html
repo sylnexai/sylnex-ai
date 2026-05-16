@@ -31,6 +31,20 @@
 }
 
   <style>
+    
+.chatBox {
+  margin-top: 30px;
+}
+
+.chatBox input {
+  width: 90%;
+  max-width: 500px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin-bottom: 10px;
+}
+    
     body {
       margin: 0;
       min-height: 100vh;
@@ -225,6 +239,13 @@
   </div>
 
   <div id="result"></div>
+  <div class="chatBox">
+  <input id="chatInput" placeholder="Ask SylNex AI anything..." />
+
+  <button onclick="askAI()">🤖 Ask AI</button>
+
+  <div id="chatResult"></div>
+</div>
   <div id="history"></div>
 
   <p class="small">#AI #Content #TikTok #Sylnex</p>
@@ -425,6 +446,53 @@ function setIdea(text) {
 
   await generateContent();
 }
+
+    async function askAI() {
+  const input = document.getElementById("chatInput").value;
+  const result = document.getElementById("chatResult");
+
+  if (!input.trim()) {
+    alert("Напиши вопрос");
+    return;
+  }
+
+  result.innerHTML = "🤖 Thinking...";
+
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        topic: input,
+        platform: "AI Chat",
+        language: "Русский",
+        contentType: "AI Assistant",
+        mode: "business"
+      })
+    });
+
+    const data = await response.json();
+
+    result.innerHTML = `
+      <div style="
+        background:#111;
+        padding:15px;
+        border-radius:15px;
+        margin-top:10px;
+        color:white;
+      ">
+        ${data.body || "Нет ответа"}
+      </div>
+    `;
+
+  } catch (error) {
+    result.innerHTML = "❌ Ошибка AI";
+  }
+}
+
     
   </script>
 </body>
