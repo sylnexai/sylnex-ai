@@ -98,6 +98,14 @@
   <p>AI Content Factory v3</p>
 
   <textarea id="topic" maxlength="500" placeholder="Напиши тему..."></textarea>
+  
+  <div class="quickIdeas">
+  <button onclick="setIdea('Как заработать онлайн')">💰 Money</button>
+  <button onclick="setIdea('Топ вирусных видео TikTok')">🔥 Viral</button>
+  <button onclick="setIdea('Как открыть бизнес')">💼 Business</button>
+  <button onclick="setIdea('Лучшие AI инструменты')">🤖 AI</button>
+</div>
+  
   <p id="counter">0 / 500</p>
 
   <select id="platform">
@@ -353,6 +361,10 @@ function setMode(mode) {
   document.getElementById("activeMode").innerText =
     "🔥 Active Mode: " + mode;
 }
+    
+function setIdea(text) {
+  document.getElementById("topic").value = text;
+}    
   </script>
 </body>
 </html>
