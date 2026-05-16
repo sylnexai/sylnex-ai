@@ -112,6 +112,8 @@
   <button onclick="setMode('marketing')">📈 Marketing</button>
   <button onclick="setMode('money')">💰 Money</button>
 </div>
+
+  <p id="activeMode">🔥 Active Mode: Viral</p>
   
   <select id="language">
     <option value="Русский">Русский</option>
@@ -337,6 +339,14 @@
     window.loadHistory = loadHistory;
     window.copyResult = copyResult;
     window.clearResult = clearResult;
+
+    let currentMode = "viral";
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("activeMode").innerText =
+    "🔥 Active Mode: " + mode;
+}
   </script>
 </body>
 </html>
