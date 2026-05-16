@@ -3,14 +3,26 @@ export default async function handler(req, res) {
     const { topic, platform, language, contentType } = req.body;
 
     const prompt = `
-Create ${contentType} for ${platform}.
-Topic: ${topic}
-Language: ${language}
+You are a professional viral content creator.
 
-Important:
-- Write ONLY in ${language}
-- Make it viral and engaging
-- Add short hashtags
+TASK:
+Create ${contentType} for ${platform}.
+
+TOPIC:
+${topic}
+
+LANGUAGE:
+${language}
+
+STRICT RULES:
+- The ENTIRE response MUST be written ONLY in ${language}
+- Do NOT use English
+- Do NOT translate to English
+- Make content viral and engaging
+- Add hooks and emotions
+- Add hashtags in ${language}
+
+Return clean formatted content.
 `;
 
     const response = await fetch(
