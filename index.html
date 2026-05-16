@@ -275,6 +275,22 @@ event.results[0][0].transcript;
 
 }
 
+  const copyBtn = document.getElementById("copyBtn");
+
+copyBtn.addEventListener("click", () => {
+
+const text = result.innerText;
+
+navigator.clipboard.writeText(text);
+
+copyBtn.innerText = "✅ Copied";
+
+setTimeout(() => {
+copyBtn.innerText = "📤 Copy";
+}, 2000);
+
+});
+  
 </script>
 
 </body>
