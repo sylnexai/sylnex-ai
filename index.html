@@ -64,6 +64,25 @@
       color: #00ff99;
     }
 
+    .aiSuggestions {
+  margin-top: 25px;
+}
+
+.aiSuggestions h3 {
+  color: #00ff99;
+}
+
+.aiSuggestions button {
+  margin: 6px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 14px;
+  background: #111;
+  color: #00ff99;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,255,153,0.3);
+}
+
     textarea {
       width: 90%;
       max-width: 520px;
@@ -139,6 +158,25 @@
   <textarea id="topic" maxlength="500" placeholder="Напиши тему..."></textarea>
   
   <div class="quickIdeas">
+    <div class="aiSuggestions">
+  <h3>🔥 AI Suggestions</h3>
+
+  <button onclick="setIdea('Как заработать с AI в 2026')">
+    💰 AI Money
+  </button>
+
+  <button onclick="setIdea('10 вирусных TikTok идей')">
+    🔥 TikTok Viral
+  </button>
+
+  <button onclick="setIdea('Лучшие бизнес идеи 2026')">
+    💼 Business Ideas
+  </button>
+
+  <button onclick="setIdea('Как раскрутить бренд')">
+    📈 Marketing
+  </button>
+</div>
   <button onclick="setIdea('Как заработать онлайн')">💰 Money</button>
   <button onclick="setIdea('Топ вирусных видео TikTok')">🔥 Viral</button>
   <button onclick="setIdea('Как открыть бизнес')">💼 Business</button>
