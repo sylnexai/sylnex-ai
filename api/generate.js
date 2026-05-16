@@ -17,7 +17,8 @@ Content Type: ${contentType}
 
 Topic:
 ${topic}
-
+Mode:
+${req.body.mode || "viral"}
 Rules:
 - Response language = ${language}
 - No English words
