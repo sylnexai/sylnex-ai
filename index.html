@@ -217,6 +217,8 @@
   <button onclick="clearResult()">🧹 Clear</button>
 
   <button onclick="makeViral()">🔥 Make More Viral</button>
+  
+  <button onclick="makeMoneyVersion()">💰 Make Money Version</button>
 
   <div id="loading" style="display:none; margin-top:20px; color:#00ff99; font-weight:bold; font-size:18px;">
     ⚡ AI is generating content...
@@ -404,6 +406,22 @@ function setIdea(text) {
     "Сделай этот текст более вирусным:\n\n" + resultText;
 
   currentMode = "viral";
+
+  await generateContent();
+}
+
+    async function makeMoneyVersion() {
+  const resultText = document.getElementById("result").innerText;
+
+  if (!resultText.trim()) {
+    alert("Сначала сгенерируй текст");
+    return;
+  }
+
+  document.getElementById("topic").value =
+    "Переделай этот текст в денежный и продающий стиль:\n\n" + resultText;
+
+  currentMode = "money";
 
   await generateContent();
 }
