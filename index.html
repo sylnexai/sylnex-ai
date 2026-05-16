@@ -294,6 +294,18 @@ copyBtn.innerText = "📤 Copy";
 }, 2000);
 
 });
+
+  userInput.addEventListener("keydown", function(event){
+
+if(event.key === "Enter" && !event.shiftKey){
+
+event.preventDefault();
+
+generateContent();
+
+}
+
+});
   
 </script>
 
