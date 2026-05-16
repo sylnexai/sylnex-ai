@@ -37,7 +37,8 @@ console.log("PROMPT:", prompt);
           Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
+         model: "gpt-4.1-mini",
+          temperature: 0.3,
           messages: [
   {
     role: "system",
