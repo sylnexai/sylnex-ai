@@ -297,6 +297,9 @@ if (!response.ok) {
     </div>
   </div>
 `;
+    result.scrollIntoView({
+  behavior: "smooth"
+});
   } 
   catch (error) {
     result.innerHTML = "❌ Ошибка: " + error.message;
