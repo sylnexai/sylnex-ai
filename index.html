@@ -159,6 +159,9 @@ placeholder="Ask anything..."
 
 <button class="voice-btn" id="voiceBtn">
 🎤 Voice
+  <button class="upload-btn" id="clearBtn">
+🧹 Clear
+</button>
 </button>
 
 </div>
@@ -305,6 +308,14 @@ generateContent();
 
 }
 
+});
+
+  const clearBtn = document.getElementById("clearBtn");
+
+clearBtn.addEventListener("click", () => {
+userInput.value = "";
+result.innerHTML = "Your AI response will appear here...";
+document.getElementById("smartActions").style.display = "none";
 });
   
 </script>
