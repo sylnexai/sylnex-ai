@@ -254,10 +254,33 @@ if (!response.ok) {
     }
 
    result.innerHTML = `
-  <h2>🔥 ${data.title}</h2>
-  <div>${data.body}</div>
-  <br>
-  <strong>${data.hashtags.join(" ")}</strong>
+  <div style="
+    background: rgba(255,255,255,0.06);
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,255,153,0.25);
+  ">
+    <h2 style="color:#00ff99;">
+      🔥 ${data.title}
+    </h2>
+
+    <div style="
+      line-height:1.8;
+      font-size:17px;
+      color:white;
+    ">
+      ${data.body}
+    </div>
+
+    <br>
+
+    <div style="
+      color:#00ff99;
+      font-weight:bold;
+    ">
+      ${data.hashtags.join(" ")}
+    </div>
+  </div>
 `;
   } 
   catch (error) {
