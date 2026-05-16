@@ -87,8 +87,11 @@
   <h3 class="green">AI Powered by OpenAI GPT</h3>
  <p>AI Content Factory v3</p>
 
-  <textarea id="topic" placeholder="Напиши тему..."></textarea>
-  <br />
+ <textarea
+  id="topic"
+  maxlength="500"
+  placeholder="Напиши тему..."
+></textarea><p id="counter">0 / 500</p>
 
 <select id="platform">
   <option value="TikTok">TikTok</option>
@@ -310,6 +313,13 @@ function copyResult() {
   navigator.clipboard.writeText(text);
   alert("Copied!");
 }
+   const topicInput = document.getElementById("topic");
+const counter = document.getElementById("counter");
+
+topicInput.addEventListener("input", () => {
+  counter.innerText =
+    topicInput.value.length + " / 500";
+});
 </script>
 </body>
 </html>
