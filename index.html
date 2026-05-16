@@ -176,6 +176,9 @@
 <div id="history"></div>
 
   <div id="result"></div>
+  <p id="loading" style="display:none; color:#00ff99;">
+⏳ AI is generating...
+</p>
 
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
@@ -235,7 +238,8 @@ async function generateContent() {
     return;
   }
 
-  result.innerHTML = "⏳ Генерирую вирусный контент...";
+  document.getElementById("loading").style.display = "block";
+result.innerHTML = "";
   button.disabled = true;
   button.innerText = "⏳ Generating...";
 
@@ -296,7 +300,7 @@ if (!response.ok) {
   } 
   catch (error) {
     result.innerHTML = "❌ Ошибка: " + error.message;
-  } finally {
+  } document.getElementById("loading").style.display = "none";finally {
     button.disabled = false;
     button.innerText = "🚀 Generate Viral Content";
   }
