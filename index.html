@@ -236,6 +236,7 @@ font-size:18px;
 async function generateContent() {
   const topic = document.getElementById("topic").value;
   const result = document.getElementById("result");
+  const loading = document.getElementById("loading")
   const platform = document.getElementById("platform").value;
   const language = document.getElementById("language").value;
   const contentType = document.getElementById("contentType").value;
@@ -248,6 +249,7 @@ async function generateContent() {
 
   document.getElementById("loading").style.display = "block";
 result.innerHTML = "";
+  loading.style.display = "block"
   button.disabled = true;
   button.innerText = "⏳ Generating...";
 
@@ -309,7 +311,10 @@ if (!response.ok) {
   behavior: "smooth"
 });
   } 
+    loading.style.display = "none"
   catch (error) {
+    loading.style.display = "none"
+  
     result.innerHTML = "❌ Ошибка: " + error.message;
   } document.getElementById("loading").style.display = "none";finally {
     button.disabled = false;
