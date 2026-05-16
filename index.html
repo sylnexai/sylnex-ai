@@ -5,6 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sylnex AI</title>
 
+  .quickIdeas, .modes {
+  margin: 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.quickIdeas button, .modes button {
+  background: linear-gradient(135deg, #00ff99, #00ccff);
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,255,153,0.4);
+}
+
+#activeMode {
+  color: #00ff99;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
   <style>
     body {
       margin: 0;
