@@ -39,11 +39,15 @@ console.log("PROMPT:", prompt);
         body: JSON.stringify({
           model: "gpt-4o-mini",
           messages: [
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
+  {
+    role: "system",
+    content: `You must answer ONLY in ${language}. Never answer in English unless selected language is English.`,
+  },
+  {
+    role: "user",
+    content: prompt,
+  },
+],
         }),
       }
     );
