@@ -24,6 +24,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    console.log(data);
+
+    if (!data.choices || !data.choices[0]) {
+      return res.status(500).json({
+        error: data.error?.message || "OpenAI response error",
+      });
+    }
+
     res.status(200).json({
       title: "🔥 Viral Content",
       body: data.choices[0].message.content,
