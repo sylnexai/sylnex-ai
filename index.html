@@ -252,6 +252,10 @@ result.innerHTML =
 data.result ||
 "Something went wrong.";
 
+  result.scrollIntoView({
+behavior: "smooth"
+});
+
   document.getElementById("smartActions").style.display = "flex";
 
   document.getElementById("smartActions").style.display = "flex";
