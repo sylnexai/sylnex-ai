@@ -3,26 +3,26 @@ export default async function handler(req, res) {
     const { topic, platform, language, contentType } = req.body;
 
     const prompt = `
-You are a professional viral content creator.
+You are a multilingual AI content creator.
 
-TASK:
-Create ${contentType} for ${platform}.
+The user topic may be in ANY language.
 
-TOPIC:
+IMPORTANT:
+You MUST ALWAYS answer ONLY in ${language}.
+Even if the topic is written in English or another language.
+
+Platform: ${platform}
+Content Type: ${contentType}
+
+Topic:
 ${topic}
 
-LANGUAGE:
-${language}
-
-STRICT RULES:
-- The ENTIRE response MUST be written ONLY in ${language}
-- Do NOT use English
-- Do NOT translate to English
-- Make content viral and engaging
-- Add hooks and emotions
-- Add hashtags in ${language}
-
-Return clean formatted content.
+Rules:
+- Response language = ${language}
+- No English words
+- No translations
+- Viral style
+- Add hashtags
 `;
 
     const response = await fetch(
