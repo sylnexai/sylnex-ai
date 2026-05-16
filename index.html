@@ -299,25 +299,50 @@ console.error(error);
 }
 
 const voiceBtn = document.getElementById("voiceBtn");
+  const recognition =
+new(window.SpeechRecognition ||
+window.webkitSpeechRecognition)();
 
-if ('webkitSpeechRecognition' in window) {
+recognition.lang = "ru-RU";
 
-const recognition = new webkitSpeechRecognition();
+recognition.onresult = (event) => {
 
+userInput.value =
+event.results[0][0].transcript;
+
+};
+
+if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+
+const SpeechRecognition =
+window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+
+recognition.lang = "ru-RU";
 recognition.continuous = false;
 recognition.interimResults = false;
 
 voiceBtn.addEventListener("click", () => {
+voiceBtn.innerText = "🎙 Listening...";
 recognition.start();
 });
 
 recognition.onresult = function(event) {
-userInput.value =
-event.results[0][0].transcript;
+userInput.value = event.results[0][0].transcript;
+voiceBtn.innerText = "🎤 Voice";
+};
+
+recognition.onerror = function() {
+voiceBtn.innerText = "🎤 Voice";
+alert("Voice recognition error. Please try again.");
+};
+
+recognition.onend = function() {
+voiceBtn.innerText = "🎤 Voice";
 };
 
 }
-
   const copyBtn = document.getElementById("copyBtn");
 
 copyBtn.addEventListener("click", () => {
