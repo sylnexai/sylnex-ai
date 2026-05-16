@@ -278,78 +278,34 @@ if (!response.ok) {
       return;
     }
 
-   result.innerHTML = `
+  result.innerHTML = `
   <div style="
     background: rgba(255,255,255,0.06);
     padding: 20px;
     border-radius: 16px;
     border: 1px solid rgba(0,255,153,0.25);
   ">
-    <h2 style="color:#00ff99;">
-      🔥 ${data.title}
-    </h2>
-
-    <div style="
-      line-height:1.8;
-      font-size:17px;
-      color:white;
-    ">
+    <h2 style="color:#00ff99;">🔥 ${data.title}</h2>
+    <div style="line-height:1.8; font-size:17px; color:white;">
       ${data.body}
     </div>
-
     <br>
-
-    <div style="
-      color:#00ff99;
-      font-weight:bold;
-    ">
+    <div style="color:#00ff99; font-weight:bold;">
       ${data.hashtags.join(" ")}
     </div>
   </div>
 `;
-    result.scrollIntoView({
+
+loading.style.display = "none";
+
+result.scrollIntoView({
   behavior: "smooth"
 });
-  } 
-    loading.style.display = "none"
-  catch (error) {
-    loading.style.display = "none"
-  
+  } catch (error) {
+    loading.style.display = "none";
     result.innerHTML = "❌ Ошибка: " + error.message;
-  } document.getElementById("loading").style.display = "none";finally {
+  } finally {
     button.disabled = false;
     button.innerText = "🚀 Generate Viral Content";
   }
 }
-
-function copyResult() {
-  const text = document.getElementById("result").innerText;
-
-  if (!text.trim()) {
-    alert("Сначала сгенерируй текст");
-    return;
-  }
-
-  navigator.clipboard.writeText(text);
-  alert("Copied!");
-}
-   const topicInput = document.getElementById("topic");
-const counter = document.getElementById("counter");
-
-topicInput.addEventListener("input", () => {
-  counter.innerText =
-    topicInput.value.length + " / 500";
-});
-   document
-  .getElementById("topic")
-  .addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      generateContent();
-    }
-
-});
-</script>
-</body>
-</html>
