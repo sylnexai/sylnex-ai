@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sylnex AI</title>
-  
+
   <style>
     body {
       margin: 0;
@@ -38,6 +38,13 @@
       resize: none;
     }
 
+    select {
+      width: 160px;
+      padding: 8px;
+      border-radius: 8px;
+      margin: 8px 4px;
+    }
+
     button {
       margin-top: 18px;
       padding: 16px 34px;
@@ -55,13 +62,12 @@
       transform: scale(1.03);
     }
 
-    select {
-    width: 140px;
-    padding: 8px;
-    border-radius: 8px;
-}
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-    #result {
+    #result, #history {
       margin: 35px auto;
       max-width: 850px;
       color: #00ff99;
@@ -69,10 +75,14 @@
       line-height: 1.6;
       white-space: pre-wrap;
       text-align: left;
+    }
+
+    #result {
       background: rgba(0, 0, 0, 0.35);
       padding: 25px;
       border-radius: 18px;
       border: 1px solid rgba(0,255,153,0.25);
+      min-height: 20px;
     }
 
     .small {
@@ -85,228 +95,241 @@
 <body>
   <h1>🚀 Sylnex AI</h1>
   <h3 class="green">AI Powered by OpenAI GPT</h3>
- <p>AI Content Factory v3</p>
+  <p>AI Content Factory v3</p>
 
- <textarea
-  id="topic"
-  maxlength="500"
-  placeholder="Напиши тему..."
-></textarea><p id="counter">0 / 500</p>
+  <textarea id="topic" maxlength="500" placeholder="Напиши тему..."></textarea>
+  <p id="counter">0 / 500</p>
 
-<select id="platform">
-  <option value="TikTok">TikTok</option>
-  <option value="Instagram Reels">Instagram Reels</option>
-  <option value="YouTube Shorts">YouTube Shorts</option>
-</select>
-<select id="language">
-  <option value="Русский">Русский</option>
-  <option value="English">English</option>
-  <option value="Deutsch">Deutsch</option>
-  <option value="Français">Français</option>
-  <option value="Español">Español</option>
-  <option value="Italiano">Italiano</option>
-  <option value="Português">Português</option>
-  <option value="Українська">Українська</option>
-  <option value="Polski">Polski</option>
-  <option value="Nederlands">Nederlands</option>
-  <option value="Svenska">Svenska</option>
-  <option value="Norsk">Norsk</option>
-  <option value="Dansk">Dansk</option>
-  <option value="Suomi">Suomi</option>
-  <option value="Čeština">Čeština</option>
-  <option value="Magyar">Magyar</option>
-  <option value="Română">Română</option>
-  <option value="Български">Български</option>
-  <option value="Српски">Српски</option>
-  <option value="Hrvatski">Hrvatski</option>
-  <option value="Slovenčina">Slovenčina</option>
-  <option value="Slovenščina">Slovenščina</option>
-  <option value="Ελληνικά">Ελληνικά</option>
+  <select id="platform">
+    <option value="TikTok">TikTok</option>
+    <option value="Instagram Reels">Instagram Reels</option>
+    <option value="YouTube Shorts">YouTube Shorts</option>
+  </select>
 
-  <option value="Tajik">Тоҷикӣ</option>
-<option value="Uzbek">O‘zbekcha</option>
-<option value="Turkmen">Türkmençe</option>
-<option value="Kazakh">Қазақша</option>
-<option value="Kyrgyz">Кыргызча</option>
-<option value="Azerbaijani">Azərbaycanca</option>
-<option value="Armenian">Հայերեն</option>
-<option value="Georgian">ქართული</option>
+  <select id="language">
+    <option value="Русский">Русский</option>
+    <option value="English">English</option>
+    <option value="Deutsch">Deutsch</option>
+    <option value="Français">Français</option>
+    <option value="Español">Español</option>
+    <option value="Italiano">Italiano</option>
+    <option value="Português">Português</option>
+    <option value="Українська">Українська</option>
+    <option value="Polski">Polski</option>
+    <option value="Nederlands">Nederlands</option>
+    <option value="Svenska">Svenska</option>
+    <option value="Norsk">Norsk</option>
+    <option value="Dansk">Dansk</option>
+    <option value="Suomi">Suomi</option>
+    <option value="Čeština">Čeština</option>
+    <option value="Magyar">Magyar</option>
+    <option value="Română">Română</option>
+    <option value="Български">Български</option>
+    <option value="Српски">Српски</option>
+    <option value="Hrvatski">Hrvatski</option>
+    <option value="Slovenčina">Slovenčina</option>
+    <option value="Slovenščina">Slovenščina</option>
+    <option value="Ελληνικά">Ελληνικά</option>
+    <option value="Tajik">Тоҷикӣ</option>
+    <option value="Uzbek">O‘zbekcha</option>
+    <option value="Turkmen">Türkmençe</option>
+    <option value="Kazakh">Қазақша</option>
+    <option value="Kyrgyz">Кыргызча</option>
+    <option value="Azerbaijani">Azərbaycanca</option>
+    <option value="Armenian">Հայերեն</option>
+    <option value="Georgian">ქართული</option>
+    <option value="Türkçe">Türkçe</option>
+    <option value="العربية">العربية</option>
+    <option value="فارسی">فارسی</option>
+    <option value="עברית">עברית</option>
+    <option value="हिन्दी">हिन्दी</option>
+    <option value="বাংলা">বাংলা</option>
+    <option value="اردو">اردو</option>
+    <option value="தமிழ்">தமிழ்</option>
+    <option value="한국어">한국어</option>
+    <option value="中文">中文</option>
+    <option value="日本語">日本語</option>
+    <option value="ไทย">ไทย</option>
+    <option value="Tiếng Việt">Tiếng Việt</option>
+    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+    <option value="Malay">Malay</option>
+    <option value="Kiswahili">Kiswahili</option>
+  </select>
 
-  <option value="Türkçe">Türkçe</option>
-  <option value="العربية">العربية</option>
-  <option value="فارسی">فارسی</option>
-  <option value="עברית">עברית</option>
-  <option value="हिन्दी">हिन्दी</option>
-  <option value="বাংলা">বাংলা</option>
-  <option value="اردو">اردو</option>
-  <option value="தமிழ்">தமிழ்</option>
-  <option value="한국어">한국어</option>
-  <option value="中文">中文</option>
-  <option value="日本語">日本語</option>
-  <option value="ไทย">ไทย</option>
-  <option value="Tiếng Việt">Tiếng Việt</option>
-  <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-  <option value="Malay">Malay</option>
-  <option value="Kiswahili">Kiswahili</option>
-</select>
   <select id="contentType">
-  <option value="Viral Ideas">Viral Ideas</option>
-  <option value="Hooks">Hooks</option>
-  <option value="Script">Script</option>
-  <option value="Hashtags">Hashtags</option>
-  <option value="CTA">CTA</option>
-</select>
-  <button onclick="generateContent()" id="generateBtn">
-    🚀 Generate Viral Content
-  </button>
+    <option value="Viral Ideas">Viral Ideas</option>
+    <option value="Hooks">Hooks</option>
+    <option value="Script">Script</option>
+    <option value="Hashtags">Hashtags</option>
+    <option value="CTA">CTA</option>
+  </select>
 
   <br />
 
- <button onclick="copyResult()">
-📋 Copy Text
-</button>
+  <button onclick="generateContent()" id="generateBtn">🚀 Generate Viral Content</button>
 
-<button onclick="loadHistory()">
-📜 History
-</button>
-  <button onclick="clearResult()">
-🧹 Clear
-</button>
- 
-<div id="history"></div>
+  <br />
 
-  <div id="loading" style="
-display:none;
-margin-top:20px;
-color:#00ff99;
-font-weight:bold;
-font-size:18px;
-">
-⚡ AI is generating content...
-</div>
+  <button onclick="copyResult()">📋 Copy Text</button>
+  <button onclick="loadHistory()">📜 History</button>
+  <button onclick="clearResult()">🧹 Clear</button>
 
-<div id="result"></div>
- 
+  <div id="loading" style="display:none; margin-top:20px; color:#00ff99; font-weight:bold; font-size:18px;">
+    ⚡ AI is generating content...
+  </div>
+
+  <div id="result"></div>
+  <div id="history"></div>
 
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
-  function clearResult() {
-  document.getElementById("result").innerHTML = "";
-  document.getElementById("topic").value = "";
-}
-  
- <script>
- async function loadHistory() {
-    const history = document.getElementById("history");
+  <script>
+    const topicInput = document.getElementById("topic");
+    const counter = document.getElementById("counter");
 
-    history.innerHTML = "⏳ Loading history...";
+    topicInput.addEventListener("input", () => {
+      counter.innerText = `${topicInput.value.length} / 500`;
+    });
 
-    try {
+    function clearResult() {
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("history").innerHTML = "";
+      document.getElementById("topic").value = "";
+      counter.innerText = "0 / 500";
+    }
+
+    function copyResult() {
+      const resultText = document.getElementById("result").innerText;
+
+      if (!resultText.trim()) {
+        alert("Нет текста для копирования");
+        return;
+      }
+
+      navigator.clipboard.writeText(resultText);
+      alert("Текст скопирован ✅");
+    }
+
+    async function loadHistory() {
+      const history = document.getElementById("history");
+      history.innerHTML = "⏳ Loading history...";
+
+      try {
         const response = await fetch("/api/history");
-
         const data = await response.json();
 
-        if (!data.history || data.history.length === 0) {
-            history.innerHTML = "❌ История пуста";
-            return;
+        if (!response.ok) {
+          history.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+          return;
         }
- 
+
+        if (!data.history || data.history.length === 0) {
+          history.innerHTML = "❌ История пуста";
+          return;
+        }
+
         history.innerHTML = "";
 
         data.history.forEach(item => {
-            history.innerHTML += `
-                <div style="
-                    background: rgba(255,255,255,0.08);
-                    padding: 15px;
-                    margin-top: 15px;
-                    border-radius: 12px;
-                    text-align: left;
-                ">
-                    <b>${item.title}</b><br><br>
-                    ${item.body}<br><br>
-                    ${item.hashtags.join(" ")}
-                </div>
-            `;
+          history.innerHTML += `
+            <div style="
+              background: rgba(255,255,255,0.08);
+              padding: 15px;
+              margin-top: 15px;
+              border-radius: 12px;
+              text-align: left;
+              color: white;
+            ">
+              <b style="color:#00ff99;">${item.title || "Untitled"}</b><br><br>
+              ${item.body || ""}<br><br>
+              <span style="color:#00ff99; font-weight:bold;">
+                ${Array.isArray(item.hashtags) ? item.hashtags.join(" ") : ""}
+              </span>
+            </div>
+          `;
+        });
+      } catch (error) {
+        history.innerHTML = "❌ Ошибка загрузки истории: " + error.message;
+      }
+    }
+
+    async function generateContent() {
+      const topic = document.getElementById("topic").value;
+      const result = document.getElementById("result");
+      const loading = document.getElementById("loading");
+      const platform = document.getElementById("platform").value;
+      const language = document.getElementById("language").value;
+      const contentType = document.getElementById("contentType").value;
+      const button = document.getElementById("generateBtn");
+
+      if (!topic.trim()) {
+        result.innerHTML = "⚠️ Напиши тему сначала.";
+        return;
+      }
+
+      loading.style.display = "block";
+      result.innerHTML = "";
+      button.disabled = true;
+      button.innerText = "⏳ Generating...";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ topic, platform, language, contentType })
         });
 
-    } catch (error) {
-        history.innerHTML = "❌ Ошибка загрузки истории";
-    }
-}
-async function generateContent() {
-  const topic = document.getElementById("topic").value;
-  const result = document.getElementById("result");
-  const loading = document.getElementById("loading")
-  const platform = document.getElementById("platform").value;
-  const language = document.getElementById("language").value;
-  const contentType = document.getElementById("contentType").value;
-  const button = document.getElementById("generateBtn");
+        const text = await response.text();
+        console.log(text);
 
-  if (!topic.trim()) {
-    result.innerHTML = "⚠️ Напиши тему сначала.";
-    return;
-  }
+        let data;
 
-  document.getElementById("loading").style.display = "block";
-result.innerHTML = "";
-  loading.style.display = "block"
-  button.disabled = true;
-  button.innerText = "⏳ Generating...";
+        try {
+          data = JSON.parse(text);
+        } catch {
+          result.innerHTML = "❌ Ошибка ответа API";
+          return;
+        }
 
-  try {
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-     body: JSON.stringify({ topic, platform, language, contentType })
-    });
+        if (!response.ok) {
+          result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+          return;
+        }
 
-    const text = await response.text();
-console.log(text);
+        result.innerHTML = `
+          <div style="
+            background: rgba(255,255,255,0.06);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(0,255,153,0.25);
+          ">
+            <h2 style="color:#00ff99;">${data.title || "🔥 Result"}</h2>
+            <div style="line-height:1.8; font-size:17px; color:white;">
+              ${data.body || ""}
+            </div>
+            <br>
+            <div style="color:#00ff99; font-weight:bold;">
+              ${Array.isArray(data.hashtags) ? data.hashtags.join(" ") : ""}
+            </div>
+          </div>
+        `;
 
-let data;
-
-try {
-    data = JSON.parse(text);
-} catch {
-    result.innerHTML = "❌ Ошибка ответа API";
-    return;
-}
-if (!response.ok) {
-      result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
-      return;
+        result.scrollIntoView({ behavior: "smooth" });
+      } catch (error) {
+        result.innerHTML = "❌ Ошибка: " + error.message;
+      } finally {
+        loading.style.display = "none";
+        button.disabled = false;
+        button.innerText = "🚀 Generate Viral Content";
+      }
     }
 
-  result.innerHTML = `
-  <div style="
-    background: rgba(255,255,255,0.06);
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid rgba(0,255,153,0.25);
-  ">
-    <h2 style="color:#00ff99;">🔥 ${data.title}</h2>
-    <div style="line-height:1.8; font-size:17px; color:white;">
-      ${data.body}
-    </div>
-    <br>
-    <div style="color:#00ff99; font-weight:bold;">
-      ${data.hashtags.join(" ")}
-    </div>
-  </div>
-`;
-
-loading.style.display = "none";
-
-result.scrollIntoView({
-  behavior: "smooth"
-});
-  } catch (error) {
-    loading.style.display = "none";
-    result.innerHTML = "❌ Ошибка: " + error.message;
-  } finally {
-    button.disabled = false;
-    button.innerText = "🚀 Generate Viral Content";
-  }
-}
-window.generateContent = generateContent;
+    window.generateContent = generateContent;
+    window.loadHistory = loadHistory;
+    window.copyResult = copyResult;
+    window.clearResult = clearResult;
+  </script>
+</body>
+</html>
