@@ -15,6 +15,9 @@ Even if the topic is written in English or another language.
 Platform: ${platform}
 Content Type: ${contentType}
 
+Mode:
+${req.body.mode || "viral"}
+
 Topic:
 ${topic}
 Mode:
