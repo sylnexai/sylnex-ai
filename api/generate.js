@@ -1,3 +1,4 @@
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 export default async function handler(req, res) {
   try {
     const { topic, platform, language, contentType } = req.body;
@@ -34,7 +35,7 @@ console.log("PROMPT:", prompt);
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify({
          model: "gpt-4.1-mini",
