@@ -224,7 +224,14 @@ alert("Please enter a prompt");
 return;
 }
 
-result.innerHTML = "Thinking...";
+result.innerHTML = `
+<div style="display:flex;align-items:center;gap:10px;">
+<div class="loading-dot"></div>
+<div class="loading-dot"></div>
+<div class="loading-dot"></div>
+<span>SylNex AI is thinking...</span>
+</div>
+`;
 result.classList.add("loading");
 
 try{
@@ -317,6 +324,33 @@ userInput.value = "";
 result.innerHTML = "Your AI response will appear here...";
 document.getElementById("smartActions").style.display = "none";
 });
+
+  .loading-dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#06b6d4;
+animation:bounce 1s infinite;
+}
+
+.loading-dot:nth-child(2){
+animation-delay:0.2s;
+}
+
+.loading-dot:nth-child(3){
+animation-delay:0.4s;
+}
+
+@keyframes bounce{
+0%,100%{
+transform:translateY(0);
+opacity:0.5;
+}
+50%{
+transform:translateY(-8px);
+opacity:1;
+}
+}
   
 </script>
 
