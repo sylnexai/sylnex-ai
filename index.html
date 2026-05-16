@@ -166,6 +166,9 @@
 <button onclick="loadHistory()">
 📜 History
 </button>
+  <button onclick="clearResult()">
+🧹 Clear
+</button>
  
 <div id="history"></div>
 
@@ -173,6 +176,11 @@
 
   <p class="small">#AI #Content #TikTok #Sylnex</p>
 
+  function clearResult() {
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("topic").value = "";
+}
+  
  <script>
  async function loadHistory() {
     const history = document.getElementById("history");
