@@ -25,6 +25,9 @@ Rules:
 - Add hashtags
 `;
 
+    console.log("LANGUAGE:", language);
+console.log("PROMPT:", prompt);
+    
     const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
       {
