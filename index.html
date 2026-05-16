@@ -216,6 +216,8 @@
   <button onclick="loadHistory()">📜 History</button>
   <button onclick="clearResult()">🧹 Clear</button>
 
+  <button onclick="makeViral()">🔥 Make More Viral</button>
+
   <div id="loading" style="display:none; margin-top:20px; color:#00ff99; font-weight:bold; font-size:18px;">
     ⚡ AI is generating content...
   </div>
@@ -390,6 +392,22 @@ function setMode(mode) {
 function setIdea(text) {
   document.getElementById("topic").value = text;
 }    
+    async function makeViral() {
+  const resultText = document.getElementById("result").innerText;
+
+  if (!resultText.trim()) {
+    alert("Сначала сгенерируй текст");
+    return;
+  }
+
+  document.getElementById("topic").value =
+    "Сделай этот текст более вирусным:\n\n" + resultText;
+
+  currentMode = "viral";
+
+  await generateContent();
+}
+    
   </script>
 </body>
 </html>
