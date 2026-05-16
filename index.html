@@ -253,10 +253,12 @@ if (!response.ok) {
       return;
     }
 
-    result.innerHTML =
-      "🔥 " + data.title + "<br><br>" +
-      data.body + "<br><br>" +
-      data.hashtags.join(" ");
+   result.innerHTML = `
+  <h2>🔥 ${data.title}</h2>
+  <div>${data.body}</div>
+  <br>
+  <strong>${data.hashtags.join(" ")}</strong>
+`;
   } 
   catch (error) {
     result.innerHTML = "❌ Ошибка: " + error.message;
