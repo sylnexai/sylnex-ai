@@ -287,7 +287,13 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ topic, platform, language, contentType })
+          body: JSON.stringify({
+  topic,
+  platform,
+  language,
+  contentType,
+  mode: currentMode
+})
         });
 
         const text = await response.text();
