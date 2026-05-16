@@ -248,9 +248,27 @@ const data = await response.json();
 
 result.classList.remove("loading");
 
-result.innerHTML =
+const finalText =
 data.result ||
 "Something went wrong.";
+
+result.innerHTML = "";
+
+let index = 0;
+
+const typingEffect = setInterval(() => {
+
+result.innerHTML += finalText.charAt(index);
+
+index++;
+
+if(index >= finalText.length){
+
+clearInterval(typingEffect);
+
+}
+
+}, 10);
 
   result.scrollIntoView({
 behavior: "smooth"
