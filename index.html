@@ -238,12 +238,10 @@ Ask about money, business, content, ideas, growth, or your next step.
 
     if ("webkitSpeechRecognition" in window) {
       const recognition = new webkitSpeechRecognition();
+
       recognition.lang = languageSelect.value || "ru-RU";
 recognition.continuous = false;
 recognition.interimResults = false;
-      recognition.lang = navigator.language || "en-US";
-      recognition.continuous = false;
-      recognition.interimResults = false;
 
       voiceBtn.addEventListener("click", function () {
         voiceBtn.innerText = "Listening...";
