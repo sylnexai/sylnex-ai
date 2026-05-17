@@ -428,8 +428,11 @@ shareBtn.addEventListener("click", async function () {
           },
           body: JSON.stringify({
             prompt:
-              "You are SylNex AI, a voice-first AI Growth Companion. Answer simply, clearly, and practically. Give the user 3 opportunities, a short action plan, and one next step. User says: " + text
-          })
+    "You are SylNex AI. The user selected language code is: " +
+    languageSelect.value +
+    ". Always answer strictly in that selected language. If the selected language is auto, answer in the same language as the user. Give 3 practical money/growth opportunities, a short action plan, and one next step. User says: " +
+    text,
+})
         });
 
         const data = await response.json();
