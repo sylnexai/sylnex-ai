@@ -392,7 +392,38 @@ shareBtn.addEventListener("click", async function () {
 
         const data = await response.json();
 
-        result.innerText = data.result || data.body || data.message || data.error || "No response received.";
+        const shareBtn = document.getElementById("shareBtn");
+
+shareBtn.addEventListener("click", async function () {
+
+  const text = result.innerText;
+
+  if (!text) return;
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share({
+        title: "SylNex AI",
+        text: text
+      });
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  } else {
+
+    navigator.clipboard.writeText(text);
+
+    shareBtn.innerText = "Copied!";
+
+    setTimeout(() => {
+      shareBtn.innerText = "Share";
+    }, 2000);
+  }
+});
         xp += 5;
         xpBox.innerText = "Growth XP: " + xp + "  +5";
       } catch (error) {
