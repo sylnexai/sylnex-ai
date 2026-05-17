@@ -196,7 +196,7 @@ Ask about money, business, content, ideas, growth, or your next step.
 
         const data = await response.json();
 
-        result.innerText = data.result || data.body || data.message || "No response received.";
+        result.innerText = data.result || data.body || data.message || data.error || "No response received.";
         xp += 5;
         xpBox.innerText = "Growth XP: " + xp + "  +5";
       } catch (error) {
