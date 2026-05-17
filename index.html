@@ -350,6 +350,14 @@ Ask about money, business, content, ideas, growth, or your next step.
   "Record motivational videos in your native language."
 ];
 
+    dailyIdeaBtn.addEventListener("click", function () {
+  dailyCard.innerText =
+    opportunities[Math.floor(Math.random() * opportunities.length)];
+
+  xp += 3;
+  xpBox.innerText = "Growth XP: " + xp;
+});
+
 dailyCard.innerText =
   opportunities[Math.floor(Math.random() * opportunities.length)];
 
