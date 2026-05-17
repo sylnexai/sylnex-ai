@@ -175,6 +175,53 @@ padding: 16px;
       <button class="primary" id="generateBtn">Generate Growth Plan</button>
     </div>
 
+    <script>
+const translations = {
+  "ru-RU": {
+    voice: "Голос",
+    clear: "Очистить",
+    share: "Поделиться",
+    generate: "Создать план"
+  },
+  "en-US": {
+    voice: "Voice",
+    clear: "Clear",
+    share: "Share",
+    generate: "Generate Plan"
+  },
+  "de-DE": {
+    voice: "Sprache",
+    clear: "Löschen",
+    share: "Teilen",
+    generate: "Plan erstellen"
+  },
+  "uz-UZ": {
+    voice: "Ovoz",
+    clear: "Tozalash",
+    share: "Ulashish",
+    generate: "Reja yaratish"
+  },
+  "tg-TJ": {
+    voice: "Овоз",
+    clear: "Тоза кардан",
+    share: "Мубодила",
+    generate: "Нақша сохтан"
+  }
+};
+
+languageSelect.addEventListener("change", () => {
+  const lang = languageSelect.value;
+  const t = translations[lang];
+
+  if (t) {
+    voiceBtn.innerText = t.voice;
+    clearBtn.innerText = t.clear;
+    shareBtn.innerText = t.share;
+    generateBtn.innerText = t.generate;
+  }
+});
+</script>
+
     <div class="result" id="result">
 Welcome to SylNex AI.
 
