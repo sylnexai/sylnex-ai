@@ -400,6 +400,15 @@ Ask about money, business, content, ideas, growth, or your next step.
 
     let streak = Number(localStorage.getItem("sylnexStreak")) || 1;
 
+    const today = new Date().toDateString();
+const lastVisit = localStorage.getItem("sylnexLastVisit");
+
+if (lastVisit !== today) {
+  streak += 1;
+  localStorage.setItem("sylnexStreak", streak);
+  localStorage.setItem("sylnexLastVisit", today);
+}
+
 const streakBox = document.createElement("div");
 
 streakBox.style.marginTop = "10px";
