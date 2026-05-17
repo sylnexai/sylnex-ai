@@ -399,6 +399,38 @@
       }
     }
 
+    const voiceBtn = document.getElementById("voiceBtn");
+const chatInput = document.getElementById("chatInput");
+
+if ('webkitSpeechRecognition' in window) {
+
+const recognition = new webkitSpeechRecognition();
+
+recognition.lang = "ru-RU";
+recognition.continuous = false;
+recognition.interimResults = false;
+
+voiceBtn.addEventListener("click", () => {
+voiceBtn.innerText = "🎙️ Listening...";
+recognition.start();
+});
+
+recognition.onresult = function(event) {
+chatInput.value = event.results[0][0].transcript;
+voiceBtn.innerText = "🎤 Voice";
+};
+
+recognition.onerror = function() {
+voiceBtn.innerText = "🎤 Voice";
+alert("Ошибка микрофона");
+};
+
+recognition.onend = function() {
+voiceBtn.innerText = "🎤 Voice";
+};
+
+}
+
     async function generateContent() {
       const topic = document.getElementById("topic").value;
       const result = document.getElementById("result");
