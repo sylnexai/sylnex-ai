@@ -278,7 +278,8 @@ const translations = {
 }
 };
 
-      const browserLang = navigator.language;
+      const savedLang = localStorage.getItem("sylnexLanguage");
+const browserLang = savedLang || navigator.language;
 
 if (translations[browserLang]) {
   languageSelect.value = browserLang;
@@ -293,6 +294,7 @@ if (translations[browserLang]) {
       
 languageSelect.addEventListener("change", () => {
   const lang = languageSelect.value;
+  localStorage.setItem("sylnexLanguage", lang);
   const t = translations[lang];
 
   if (t) {
