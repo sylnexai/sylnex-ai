@@ -278,6 +278,19 @@ const translations = {
 }
 };
 
+      const browserLang = navigator.language;
+
+if (translations[browserLang]) {
+  languageSelect.value = browserLang;
+
+  const t = translations[browserLang];
+
+  voiceBtn.innerText = t.voice;
+  clearBtn.innerText = t.clear;
+  shareBtn.innerText = t.share;
+  generateBtn.innerText = t.generate;
+}
+      
 languageSelect.addEventListener("change", () => {
   const lang = languageSelect.value;
   const t = translations[lang];
