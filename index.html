@@ -397,6 +397,19 @@ Ask about money, business, content, ideas, growth, or your next step.
     const dailyIdeaBtn = document.getElementById("dailyIdeaBtn");
     
     let xp = 0;
+
+    let streak = Number(localStorage.getItem("sylnexStreak")) || 1;
+
+const streakBox = document.createElement("div");
+
+streakBox.style.marginTop = "10px";
+streakBox.style.textAlign = "center";
+streakBox.style.color = "#00e5ff";
+streakBox.style.fontWeight = "bold";
+
+streakBox.innerText = "🔥 Daily Streak: " + streak;
+
+document.querySelector(".xp").after(streakBox);
     
     const opportunities = [
   "Start a local delivery service in your city.",
