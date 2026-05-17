@@ -1,84 +1,56 @@
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 export default async function handler(req, res) {
   try {
-    const { topic, platform, language, contentType } = req.body;
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Only POST requests allowed" });
+    }
 
- const prompt = `
-You are SylNex AI, a highly intelligent modern AI assistant.
+    const userPrompt = req.body.prompt || "";
 
-Your goals:
-- Give practical, smart, modern, realistic answers.
-- Avoid generic or low-quality advice.
-- Never give lazy tips like "sell old stuff" unless truly relevant.
-- Think like a successful entrepreneur, AI strategist, marketer, creator and business consultant.
-- Adapt automatically to the user's language.
-- Give useful, actionable and modern responses.
-- Focus on real-world value, speed, monetization, creativity and leverage.
-- Make responses engaging, clean and premium quality.
-- If the user asks about money, business or content creation:
-  - prioritize scalable online opportunities
-  - AI tools
-  - automation
-  - social media
-  - digital business
-  - freelancing
-  - content creation
-  - modern trends
-- Give structured answers.
-- Be concise but valuable.
-- Sound like a premium AI advisor.
+    if (!userPrompt.trim()) {
+      return res.status(400).json({ error: "Prompt is empty" });
+    }
 
-User request:
-${prompt}
-`;
-
-    console.log("LANGUAGE:", language);
-console.log("PROMPT:", prompt);
-    
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-         model: "gpt-4.1-mini",
-          temperature: 0.3,
-          messages: [
-  {
-    role: "system",
-    content: `You must answer ONLY in ${language}. Never answer in English unless selected language is English.`,
-  },
-  {
-    role: "user",
-    content: prompt,
-  },
-],
-        }),
-      }
-    );
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are SylNex AI, a voice-first AI Growth Companion. Answer clearly, practically, and simply. Give 3 opportunities, a short action plan, and one next step. Reply in the same language as the user."
+          },
+          {
+            role: "user",
+            content: userPrompt
+          }
+        ],
+        temperature: 0.8
+      })
+    });
 
     const data = await response.json();
 
-    if (!data.choices || !data.choices[0]) {
+    if (!response.ok) {
       return res.status(500).json({
-        error: data.error?.message || "OpenAI response error",
+        error: data.error?.message || "OpenAI API error"
       });
     }
 
-    res.status(200).json({
-      title: `🔥 ${contentType} for ${platform}`,
-      body: data.choices[0].message.content,
-      hashtags: ["#viral", "#ai", "#content"],
+    const answer = data.choices?.[0]?.message?.content || "";
+
+    return res.status(200).json({
+      result: answer,
+      body: answer,
+      message: answer
     });
   } catch (error) {
-    res.status(500).json({
-      error: error.message,
+    return res.status(500).json({
+      error: error.message || "Server error"
     });
   }
 }
-
-// force redeploy
-// redeploy 2
