@@ -1,413 +1,577 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>SylNex AI</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sylnex AI</title>
+  
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+
+  .quickIdeas, .modes {
+  margin: 12px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
 
-body{
-background:#0f172a;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-padding:20px;
+.quickIdeas button, .modes button {
+  background: linear-gradient(135deg, #00ff99, #00ccff);
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,255,153,0.4);
 }
 
-.container{
-width:100%;
-max-width:900px;
+#activeMode {
+  color: #00ff99;
+  font-weight: bold;
+  margin: 10px 0;
+}
+    
+.chatBox {
+  margin-top: 30px;
 }
 
-.logo{
-font-size:42px;
-font-weight:700;
-margin-bottom:10px;
-text-align:center;
+.chatBox input {
+  width: 90%;
+  max-width: 500px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  margin-bottom: 10px;
+}
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #10291d, #050505 60%);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    .green {
+      color: #00ff99;
+    }
+
+    .aiSuggestions {
+  margin-top: 25px;
 }
 
-.subtitle{
-text-align:center;
-opacity:0.7;
-margin-bottom:40px;
+.aiSuggestions h3 {
+  color: #00ff99;
 }
 
-.chat-box{
-background:#1e293b;
-border-radius:24px;
-padding:20px;
-box-shadow:0 0 30px rgba(0,0,0,0.3);
+.aiSuggestions button {
+  margin: 6px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 14px;
+  background: #111;
+  color: #00ff99;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,255,153,0.3);
 }
 
-textarea{
-width:100%;
-height:140px;
-background:#0f172a;
-border:none;
-outline:none;
-resize:none;
-border-radius:16px;
-padding:20px;
-font-size:18px;
-color:white;
-margin-bottom:20px;
-}
+    textarea {
+      width: 90%;
+      max-width: 520px;
+      height: 130px;
+      border-radius: 16px;
+      border: none;
+      padding: 18px;
+      font-size: 16px;
+      margin-top: 20px;
+      outline: none;
+      resize: none;
+    }
 
-.actions{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-flex-wrap:wrap;
-}
+    select {
+      width: 160px;
+      padding: 8px;
+      border-radius: 8px;
+      margin: 8px 4px;
+    }
 
-.left-actions{
-display:flex;
-gap:10px;
-}
+    button {
+      margin-top: 18px;
+      padding: 16px 34px;
+      border: none;
+      border-radius: 14px;
+      background: #00ff99;
+      color: #06150f;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(0,255,153,0.4);
+    }
 
-button{
-border:none;
-padding:14px 18px;
-border-radius:14px;
-cursor:pointer;
-font-size:15px;
-font-weight:600;
-transition:0.2s;
-}
+    button:hover {
+      transform: scale(1.03);
+    }
 
-.upload-btn{
-background:#334155;
-color:white;
-}
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-.voice-btn{
-background:#334155;
-color:white;
-}
+    #result, #history {
+      margin: 35px auto;
+      max-width: 850px;
+      color: #00ff99;
+      font-size: 17px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      text-align: left;
+    }
 
-.generate-btn{
-background:#06b6d4;
-color:white;
-flex:1;
-}
+    #result {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 25px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,153,0.25);
+      min-height: 20px;
+    }
 
-button:hover{
-transform:scale(1.03);
-opacity:0.9;
-}
-
-#result{
-margin-top:25px;
-background:#0f172a;
-padding:20px;
-border-radius:18px;
-line-height:1.7;
-white-space:pre-wrap;
-min-height:120px;
-  font-size:16px;
-overflow-wrap:break-word;
-}
-
-.loading{
-opacity:0.6;
-animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-0%{opacity:0.3;}
-50%{opacity:1;}
-100%{opacity:0.3;}
-}
-</style>
+    .small {
+      opacity: 0.8;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
+  <h1>🚀 Sylnex AI</h1>
+  <h3 class="green">AI Powered by OpenAI GPT</h3>
+  <p>AI Content Factory v3</p>
 
-<div class="container">
+  <textarea id="topic" maxlength="500" placeholder="Напиши тему..."></textarea>
+  
+  <div class="quickIdeas">
+    <div class="aiSuggestions">
+  <h3>🔥 AI Suggestions</h3>
 
-<div class="logo">
-SylNex AI
+  <button onclick="setIdea('Как заработать с AI в 2026')">
+    💰 AI Money
+  </button>
+
+  <button onclick="setIdea('10 вирусных TikTok идей')">
+    🔥 TikTok Viral
+  </button>
+
+  <button onclick="setIdea('Лучшие бизнес идеи 2026')">
+    💼 Business Ideas
+  </button>
+
+  <button onclick="setIdea('Как раскрутить бренд')">
+    📈 Marketing
+  </button>
 </div>
+    <div class="quickIdeas">
+  <h3>🔥 Quick AI Templates</h3>
 
-<div class="subtitle">
-Smart AI Assistant for Content, Business & Ideas
+  <button onclick="setIdea('Create a viral TikTok about money')">
+    💸 Money TikTok
+  </button>
+
+  <button onclick="setIdea('Best AI business startup ideas')">
+    🚀 AI Startup
+  </button>
+
+  <button onclick="setIdea('Create motivational Instagram Reel')">
+    🎬 Motivation Reel
+  </button>
+
+  <button onclick="setIdea('Top 10 online business ideas')">
+    💼 Online Business
+  </button>
 </div>
-
-<div class="chat-box">
-
-<textarea
-id="userInput"
-placeholder="Ask anything..."
-></textarea>
-
-<div class="actions">
-
-<div class="left-actions">
-
-<button class="upload-btn">
-📎 Upload
-</button>
-
-<button class="voice-btn" id="voiceBtn">
-🎤 Voice
-  <button class="upload-btn" id="clearBtn">
-🧹 Clear
-</button>
-</button>
-
-</div>
-
-<button
-class="generate-btn"
-id="generateBtn"
->
-Generate
-</button>
-
-</div>
-
-<div id="result">
-<div style="text-align:center;padding:30px 10px;">
-<h2 style="margin-bottom:10px;">👋 Welcome to SylNex AI</h2>
-<p style="opacity:0.7;">
-Ask anything about business, content, money, ideas, AI, social media or productivity.
-</p>
-</div>
-</div>
-
-  <div id="smartActions" style="display:none; margin-top:15px; flex-wrap:wrap; gap:10px;">
-
-<button class="upload-btn">
-🔥 Make Viral
-</button>
-
-<button class="upload-btn">
-💰 Monetize
-</button>
-
-<button class="upload-btn">
-🎬 Reel Idea
-</button>
-
-<button class="upload-btn">
-✨ Improve
-</button>
-
-<button class="upload-btn" id="copyBtn">
-📤 Copy
-</button>
-
+  <button onclick="setIdea('Как заработать онлайн')">💰 Money</button>
+  <button onclick="setIdea('Топ вирусных видео TikTok')">🔥 Viral</button>
+  <button onclick="setIdea('Как открыть бизнес')">💼 Business</button>
+  <button onclick="setIdea('Лучшие AI инструменты')">🤖 AI</button>
 </div>
   
-</div>
+  <p id="counter">0 / 500</p>
 
-</div>
-
-<script>
-
-const generateBtn = document.getElementById("generateBtn");
-const userInput = document.getElementById("userInput");
-const result = document.getElementById("result");
-
-generateBtn.addEventListener("click", generateContent);
-
-async function generateContent(){
-
-const prompt = userInput.value;
-
-if(!prompt){
-alert("Please enter a prompt");
-return;
-}
-
-result.innerHTML = `
-<div style="display:flex;align-items:center;gap:10px;">
-<div class="loading-dot"></div>
-<div class="loading-dot"></div>
-<div class="loading-dot"></div>
-<span>SylNex AI is thinking...</span>
-</div>
-`;
-result.classList.add("loading");
-
-try{
-
-const response = await fetch("/api/generate",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({prompt})
-});
-
-const data = await response.json();
-
-result.classList.remove("loading");
-
-const finalText =
-data.result ||
-"Something went wrong.";
-
-result.innerHTML = "";
-
-let index = 0;
-
-const typingEffect = setInterval(() => {
-
-result.innerHTML += finalText.charAt(index);
-
-index++;
-
-if(index >= finalText.length){
-
-clearInterval(typingEffect);
-
-}
-
-}, 10);
-
-  result.scrollIntoView({
-behavior: "smooth"
-});
-
-  document.getElementById("smartActions").style.display = "flex";
-
-  document.getElementById("smartActions").style.display = "flex";
-
-}catch(error){
-
-result.classList.remove("loading");
-
-result.innerHTML =
-"Error connecting to AI.";
-
-console.error(error);
-
-}
-
-}
-
-const voiceBtn = document.getElementById("voiceBtn");
-  const recognition =
-new(window.SpeechRecognition ||
-window.webkitSpeechRecognition)();
-
-recognition.lang = "ru-RU";
-
-recognition.onresult = (event) => {
-
-userInput.value =
-event.results[0][0].transcript;
-
-};
-
-if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-
-const SpeechRecognition =
-window.SpeechRecognition || window.webkitSpeechRecognition;
-
-const recognition = new SpeechRecognition();
-
-recognition.lang = "ru-RU";
-recognition.continuous = false;
-recognition.interimResults = false;
-
-voiceBtn.addEventListener("click", () => {
-voiceBtn.innerText = "Listening...";
-recognition.start();
-});
-
-recognition.onresult = function(event) {
-userInput.value = event.results[0][0].transcript;
-voiceBtn.innerText = "Voice";
-};
-
-recognition.onerror = function() {
-voiceBtn.innerText = "Voice";
-alert("Voice recognition error. Please try again.");
-};
-
-recognition.onend = function() {
-voiceBtn.innerText = "Voice";
-};
-
-}
-  const copyBtn = document.getElementById("copyBtn");
-
-copyBtn.addEventListener("click", () => {
-
-const text = result.innerText;
-
-navigator.clipboard.writeText(text);
-
-copyBtn.innerText = "✅ Copied";
-
-setTimeout(() => {
-copyBtn.innerText = "📤 Copy";
-}, 2000);
-
-});
-
-  userInput.addEventListener("keydown", function(event){
-
-if(event.key === "Enter" && !event.shiftKey){
-
-event.preventDefault();
-
-generateContent();
-
-}
-
-});
-
-  const clearBtn = document.getElementById("clearBtn");
-
-clearBtn.addEventListener("click", () => {
-userInput.value = "";
-result.innerHTML = "Your AI response will appear here...";
-document.getElementById("smartActions").style.display = "none";
-});
-
-  .loading-dot{
-width:10px;
-height:10px;
-border-radius:50%;
-background:#06b6d4;
-animation:bounce 1s infinite;
-}
-
-.loading-dot:nth-child(2){
-animation-delay:0.2s;
-}
-
-.loading-dot:nth-child(3){
-animation-delay:0.4s;
-}
-
-@keyframes bounce{
-0%,100%{
-transform:translateY(0);
-opacity:0.5;
-}
-50%{
-transform:translateY(-8px);
-opacity:1;
-}
-}
+  <select id="platform">
+    <option value="TikTok">TikTok</option>
+    <option value="Instagram Reels">Instagram Reels</option>
+    <option value="YouTube Shorts">YouTube Shorts</option>
+  </select>
   
-</script>
+<div class="modes">
+  <button onclick="setMode('viral')">🔥 Viral</button>
+  <button onclick="setMode('business')">💼 Business</button>
+  <button onclick="setMode('marketing')">📈 Marketing</button>
+  <button onclick="setMode('money')">💰 Money</button>
+</div>
 
+  <p id="activeMode">🔥 Active Mode: Viral</p>
+
+  <div class="aiSuggestions">
+  <h3>⚡ AI Suggestions</h3>
+
+  <button onclick="setIdeaText('10 viral business ideas for 2026')">
+    💼 Business Ideas
+  </button>
+
+  <button onclick="setIdeaText('Best marketing tricks for TikTok growth')">
+    📈 Marketing
+  </button>
+
+  <button onclick="setIdeaText('How to make money online with AI')">
+    💰 Money AI
+  </button>
+
+  <button onclick="setIdeaText('Create viral Instagram Reel script')">
+    🔥 Viral Reel
+  </button>
+</div>
+  
+  <select id="language">
+    <option value="Русский">Русский</option>
+    <option value="English">English</option>
+    <option value="Deutsch">Deutsch</option>
+    <option value="Français">Français</option>
+    <option value="Español">Español</option>
+    <option value="Italiano">Italiano</option>
+    <option value="Português">Português</option>
+    <option value="Українська">Українська</option>
+    <option value="Polski">Polski</option>
+    <option value="Nederlands">Nederlands</option>
+    <option value="Svenska">Svenska</option>
+    <option value="Norsk">Norsk</option>
+    <option value="Dansk">Dansk</option>
+    <option value="Suomi">Suomi</option>
+    <option value="Čeština">Čeština</option>
+    <option value="Magyar">Magyar</option>
+    <option value="Română">Română</option>
+    <option value="Български">Български</option>
+    <option value="Српски">Српски</option>
+    <option value="Hrvatski">Hrvatski</option>
+    <option value="Slovenčina">Slovenčina</option>
+    <option value="Slovenščina">Slovenščina</option>
+    <option value="Ελληνικά">Ελληνικά</option>
+    <option value="Tajik">Тоҷикӣ</option>
+    <option value="Uzbek">O‘zbekcha</option>
+    <option value="Turkmen">Türkmençe</option>
+    <option value="Kazakh">Қазақша</option>
+    <option value="Kyrgyz">Кыргызча</option>
+    <option value="Azerbaijani">Azərbaycanca</option>
+    <option value="Armenian">Հայերեն</option>
+    <option value="Georgian">ქართული</option>
+    <option value="Türkçe">Türkçe</option>
+    <option value="العربية">العربية</option>
+    <option value="فارسی">فارسی</option>
+    <option value="עברית">עברית</option>
+    <option value="हिन्दी">हिन्दी</option>
+    <option value="বাংলা">বাংলা</option>
+    <option value="اردو">اردو</option>
+    <option value="தமிழ்">தமிழ்</option>
+    <option value="한국어">한국어</option>
+    <option value="中文">中文</option>
+    <option value="日本語">日本語</option>
+    <option value="ไทย">ไทย</option>
+    <option value="Tiếng Việt">Tiếng Việt</option>
+    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+    <option value="Malay">Malay</option>
+    <option value="Kiswahili">Kiswahili</option>
+  </select>
+
+  <select id="contentType">
+    <option value="Viral Ideas">Viral Ideas</option>
+    <option value="Hooks">Hooks</option>
+    <option value="Script">Script</option>
+    <option value="Hashtags">Hashtags</option>
+    <option value="CTA">CTA</option>
+  </select>
+
+  <br />
+
+  <button onclick="generateContent()" id="generateBtn">🚀 Generate Viral Content</button>
+
+  <br />
+
+  <button onclick="copyResult()">📋 Copy Text</button>
+  <button onclick="loadHistory()">📜 History</button>
+  <button onclick="clearResult()">🧹 Clear</button>
+
+  <button onclick="makeViral()">🔥 Make More Viral</button>
+  
+  <button onclick="makeMoneyVersion()">💰 Make Money Version</button>
+
+  <div id="loading" style="display:none; margin-top:20px; color:#00ff99; font-weight:bold; font-size:18px;">
+    ⚡ AI is generating content...
+  </div>
+
+  <div id="result"></div>
+  <div class="chatBox">
+  <input id="chatInput" placeholder="Ask SylNex AI anything..." />
+
+  <button onclick="askAI()">🤖 Ask AI</button>
+
+  <div id="chatResult"></div>
+</div>
+  <div id="history"></div>
+
+  <p class="small">#AI #Content #TikTok #Sylnex</p>
+
+  <script>
+    const topicInput = document.getElementById("topic");
+    const counter = document.getElementById("counter");
+
+    topicInput.addEventListener("input", () => {
+      counter.innerText = `${topicInput.value.length} / 500`;
+    });
+
+    function clearResult() {
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("history").innerHTML = "";
+      document.getElementById("topic").value = "";
+      counter.innerText = "0 / 500";
+    }
+
+    function copyResult() {
+      const resultText = document.getElementById("result").innerText;
+
+      if (!resultText.trim()) {
+        alert("Нет текста для копирования");
+        return;
+      }
+
+      navigator.clipboard.writeText(resultText);
+      alert("Текст скопирован ✅");
+    }
+
+    async function loadHistory() {
+      const history = document.getElementById("history");
+      history.innerHTML = "⏳ Loading history...";
+
+      try {
+        const response = await fetch("/api/history");
+        const data = await response.json();
+
+        if (!response.ok) {
+          history.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+          return;
+        }
+
+        if (!data.history || data.history.length === 0) {
+          history.innerHTML = "❌ История пуста";
+          return;
+        }
+
+        history.innerHTML = "";
+
+        data.history.forEach(item => {
+          history.innerHTML += `
+            <div style="
+              background: rgba(255,255,255,0.08);
+              padding: 15px;
+              margin-top: 15px;
+              border-radius: 12px;
+              text-align: left;
+              color: white;
+            ">
+              <b style="color:#00ff99;">${item.title || "Untitled"}</b><br><br>
+              ${item.body || ""}<br><br>
+              <span style="color:#00ff99; font-weight:bold;">
+                ${Array.isArray(item.hashtags) ? item.hashtags.join(" ") : ""}
+              </span>
+            </div>
+          `;
+        });
+      } catch (error) {
+        history.innerHTML = "❌ Ошибка загрузки истории: " + error.message;
+      }
+    }
+
+    async function generateContent() {
+      const topic = document.getElementById("topic").value;
+      const result = document.getElementById("result");
+      const loading = document.getElementById("loading");
+      const platform = document.getElementById("platform").value;
+      const language = document.getElementById("language").value;
+      const contentType = document.getElementById("contentType").value;
+      const button = document.getElementById("generateBtn");
+
+      if (!topic.trim()) {
+        result.innerHTML = "⚠️ Напиши тему сначала.";
+        return;
+      }
+
+      loading.style.display = "block";
+      result.innerHTML = "";
+      button.disabled = true;
+      button.innerText = "⏳ Generating...";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+  topic,
+  platform,
+  language,
+  contentType,
+  mode: currentMode
+})
+        });
+
+        const text = await response.text();
+        console.log(text);
+
+        let data;
+
+        try {
+          data = JSON.parse(text);
+        } catch {
+          result.innerHTML = "❌ Ошибка ответа API";
+          return;
+        }
+
+        if (!response.ok) {
+          result.innerHTML = "❌ Ошибка API: " + (data.error || "unknown error");
+          return;
+        }
+
+        result.innerHTML = `
+          <div style="
+            background: rgba(255,255,255,0.06);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(0,255,153,0.25);
+          ">
+            <h2 style="color:#00ff99;">${data.title || "🔥 Result"}</h2>
+            <div style="line-height:1.8; font-size:17px; color:white;">
+              ${data.body || ""}
+            </div>
+            <br>
+            <div style="color:#00ff99; font-weight:bold;">
+              ${Array.isArray(data.hashtags) ? data.hashtags.join(" ") : ""}
+            </div>
+          </div>
+        `;
+
+        result.scrollIntoView({ behavior: "smooth" });
+      } catch (error) {
+        result.innerHTML = "❌ Ошибка: " + error.message;
+      } finally {
+        loading.style.display = "none";
+        button.disabled = false;
+        button.innerText = "🚀 Generate Viral Content";
+      }
+    }
+
+    window.generateContent = generateContent;
+    window.loadHistory = loadHistory;
+    window.copyResult = copyResult;
+    window.clearResult = clearResult;
+
+    let currentMode = "viral";
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("activeMode").innerText =
+    "🔥 Active Mode: " + mode;
+}
+    
+function setIdea {
+  document.getElementById("topic").value = text;
+}    
+    async function makeViral() {
+  const resultText = document.getElementById("result").innerText;
+
+  if (!resultText.trim()) {
+    alert("Сначала сгенерируй текст");
+    return;
+  }
+
+  document.getElementById("topic").value =
+    "Сделай этот текст более вирусным:\n\n" + resultText;
+
+  currentMode = "viral";
+
+  await generateContent();
+}
+
+    async function makeMoneyVersion() {
+  const resultText = document.getElementById("result").innerText;
+
+  if (!resultText.trim()) {
+    alert("Сначала сгенерируй текст");
+    return;
+  }
+
+  document.getElementById("topic").value =
+    "Переделай этот текст в денежный и продающий стиль:\n\n" + resultText;
+
+  currentMode = "money";
+
+  await generateContent();
+}
+
+    async function askAI() {
+  const input = document.getElementById("chatInput").value;
+  const result = document.getElementById("chatResult");
+
+  if (!input.trim()) {
+    alert("Напиши вопрос");
+    return;
+  }
+
+  result.innerHTML = "🤖 Thinking...";
+
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        topic: input,
+        platform: "AI Chat",
+        language: "Русский",
+        contentType: "AI Assistant",
+        mode: "business"
+      })
+    });
+
+    const data = await response.json();
+
+    result.innerHTML = `
+      <div style="
+        background:#111;
+        padding:15px;
+        border-radius:15px;
+        margin-top:10px;
+        color:white;
+      ">
+        ${data.body || "Нет ответа"}
+      </div>
+    `;
+
+  } catch (error) {
+    result.innerHTML = "❌ Ошибка AI";
+  }
+}
+
+    document.getElementById("generateBtn").addEventListener("click", generateContent);
+    
+  </script>
 </body>
 </html>
-<!-- force deploy v2 -->
