@@ -440,6 +440,24 @@ document.querySelector(".xp").after(streakBox);
   "Record motivational videos in your native language."
 ];
 
+    const missions = [
+  "Learn one new AI tool today.",
+  "Ask AI for one business idea.",
+  "Watch one video about making money online.",
+  "Improve your CV today.",
+  "Post one useful idea on social media.",
+  "Learn 5 new German words.",
+  "Search for one new opportunity today.",
+  "Write one small business plan.",
+  "Help someone using AI.",
+  "Take one step toward your future."
+];
+
+const missionText = document.getElementById("missionText");
+
+missionText.innerText =
+  missions[Math.floor(Math.random() * missions.length)];
+
     dailyIdeaBtn.addEventListener("click", function () {
   dailyCard.innerText =
     opportunities[Math.floor(Math.random() * opportunities.length)];
