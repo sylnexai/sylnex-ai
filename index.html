@@ -324,22 +324,22 @@ recognition.continuous = false;
 recognition.interimResults = false;
 
 voiceBtn.addEventListener("click", () => {
-voiceBtn.innerText = "🎙 Listening...";
+voiceBtn.innerText = "Listening...";
 recognition.start();
 });
 
 recognition.onresult = function(event) {
 userInput.value = event.results[0][0].transcript;
-voiceBtn.innerText = "🎤 Voice";
+voiceBtn.innerText = "Voice";
 };
 
 recognition.onerror = function() {
-voiceBtn.innerText = "🎤 Voice";
+voiceBtn.innerText = "Voice";
 alert("Voice recognition error. Please try again.");
 };
 
 recognition.onend = function() {
-voiceBtn.innerText = "🎤 Voice";
+voiceBtn.innerText = "Voice";
 };
 
 }
