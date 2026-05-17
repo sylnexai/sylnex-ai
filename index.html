@@ -356,6 +356,14 @@ Ask about money, business, content, ideas, growth, or your next step.
 
   xp += 3;
   xpBox.innerText = "Growth XP: " + xp;
+
+if (xp >= 20) {
+  result.innerText = "🔥 You reached Growth Level 2!";
+}
+
+if (xp >= 50) {
+  result.innerText = "🚀 You unlocked AI Hustler Mode!";
+}
 });
 
 dailyCard.innerText =
