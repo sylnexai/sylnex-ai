@@ -334,6 +334,22 @@ Ask about money, business, content, ideas, growth, or your next step.
     const dailyCard = document.querySelector(".daily-card h2");
     let xp = 0;
 
+    const opportunities = [
+  "Start a local delivery service in your city.",
+  "Use AI tools to create TikTok videos for businesses.",
+  "Offer translation help for migrants in Germany.",
+  "Create simple websites for local shops.",
+  "Sell digital products online using AI.",
+  "Help elderly people with smartphones and technology.",
+  "Start a mobile car cleaning service.",
+  "Use ChatGPT to write CVs and job applications.",
+  "Become a freelance content creator.",
+  "Record motivational videos in your native language."
+];
+
+dailyCard.innerText =
+  opportunities[Math.floor(Math.random() * opportunities.length)];
+
     clearBtn.addEventListener("click", function () {
       userInput.value = "";
       result.innerText = "Ready for your next opportunity.";
