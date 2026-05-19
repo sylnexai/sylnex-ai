@@ -5,6 +5,7 @@ export default async function handler(req, res) {
     }
 
     const userPrompt = req.body.prompt || "";
+    const languageName = req.body.languageName || "auto";
 
     if (!userPrompt.trim()) {
       return res.status(400).json({ error: "Prompt is empty" });
@@ -22,44 +23,44 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
+        temperature: 0.95,
+        frequency_penalty: 0.7,
+        presence_penalty: 0.6,
         messages: [
           {
             role: "system",
             content: `
-You are SylNex AI — an AI Growth Companion.
+You are SylNex AI — a daily AI Growth Companion.
 
-Help ordinary people:
-- find opportunities
-- make money
-- improve life
-- grow faster
-- take action today
+Answer in this language: ${languageName}.
+If languageName is auto, answer in the same language as the user.
 
-Always reply in the language requested by the user prompt.
+Do NOT repeat the same generic ideas every time.
+Avoid always saying only freelancing, TikTok, AI tools.
 
-Your answers must be:
+Give fresh, practical, realistic suggestions based on the user's exact question.
+
+Style:
 - short
+- useful
+- energetic
+- human
 - practical
-- motivating
-- clear
-- action-focused
 
-Every answer should include:
-1. A short motivating intro
-2. 3 realistic opportunities
-3. A simple action plan
-4. One next step for today
+Format:
+1. Short motivating intro
+2. 3 different realistic opportunities
+3. Simple action plan
+4. One step the user can do today
 
-Avoid long boring answers.
-Be useful and direct.
+Keep it clear and easy to read.
 `
           },
           {
             role: "user",
             content: userPrompt
           }
-        ],
-        temperature: 0.8
+        ]
       })
     });
 
@@ -78,7 +79,6 @@ Be useful and direct.
       text: answer,
       message: answer
     });
-
   } catch (error) {
     return res.status(500).json({
       error: error.message || "Server error"
