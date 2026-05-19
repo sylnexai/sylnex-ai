@@ -6,12 +6,7 @@
   <title>SylNex AI</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
 
     body {
       min-height: 100vh;
@@ -34,42 +29,49 @@
       backdrop-filter: blur(18px);
     }
 
-    .logo {
-      text-align: center;
-      font-size: 34px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
+    .logo { text-align: center; font-size: 34px; font-weight: 800; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #cbd5ff; font-size: 14px; margin-bottom: 18px; }
 
-    .subtitle {
-      text-align: center;
-      color: #cbd5ff;
-      font-size: 14px;
-      margin-bottom: 22px;
+    select {
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 16px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: white;
     }
 
     .daily-card {
       background: linear-gradient(135deg, #00c6ff, #7f5cff);
       border-radius: 22px;
       padding: 18px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       box-shadow: 0 12px 30px rgba(0, 198, 255, 0.25);
     }
 
-    .daily-card small {
-      opacity: 0.9;
-      font-weight: bold;
+    .daily-card small { opacity: 0.9; font-weight: bold; }
+    .daily-card h2 { margin-top: 8px; font-size: 20px; line-height: 1.3; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .daily-card h2 {
-      margin-top: 8px;
-      font-size: 20px;
-      line-height: 1.3;
+    .stat-card {
+      background: rgba(0,0,0,0.28);
+      border-radius: 18px;
+      padding: 14px;
+      text-align: center;
+      color: #00e5ff;
+      font-weight: bold;
     }
 
     textarea {
       width: 100%;
-      min-height: 130px;
+      min-height: 120px;
       background: rgba(0, 0, 0, 0.35);
       color: white;
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -81,9 +83,7 @@
       margin-bottom: 14px;
     }
 
-    textarea::placeholder {
-      color: #aab3d6;
-    }
+    textarea::placeholder { color: #aab3d6; }
 
     .buttons {
       display: grid;
@@ -106,33 +106,26 @@
     .primary {
       grid-column: span 2;
       background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-      color: white;
       box-shadow: 0 10px 25px rgba(0, 210, 255, 0.25);
+    }
+
+    .voice-main {
+      font-size: 18px;
+      background: linear-gradient(135deg, #ff7a18, #af00ff);
+      box-shadow: 0 0 30px rgba(175, 0, 255, 0.35);
     }
 
     .result {
       min-height: 160px;
       background: rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(10px);
-border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 22px;
       padding: 18px;
-      line-height: 1.55;
+      line-height: 1.6;
       color: #eef3ff;
       white-space: pre-wrap;
       max-height: 300px;
-overflow-y: auto;
-white-space: pre-wrap;
-line-height: 1.6;
-padding: 16px;
-    }
-
-    .xp {
-      margin-top: 14px;
-      text-align: center;
-      color: #00e5ff;
-      font-weight: bold;
-      font-size: 14px;
+      overflow-y: auto;
     }
   </style>
 </head>
@@ -140,481 +133,60 @@ padding: 16px;
 <body>
   <div class="app">
     <div class="logo">SylNex AI</div>
-    <div class="subtitle">Speak. Grow. Move Forward.</div>
+    <div class="subtitle">Your daily growth companion</div>
 
     <select id="languageSelect">
-  <option value="auto">🌍 Auto language</option>
-  <option value="en-US">English</option>
-  <option value="de-DE">Deutsch</option>
-  <option value="ru-RU">Русский</option>
-  <option value="uz-UZ">Oʻzbek</option>
-  <option value="tg-TJ">Тоҷикӣ</option>
-  <option value="uk-UA">Українська</option>
-  <option value="pl-PL">Polski</option>
-  <option value="tr-TR">Türkçe</option>
-  <option value="fr-FR">Français</option>
-  <option value="es-ES">Español</option>
-  <option value="it-IT">Italiano</option>
-  <option value="pt-PT">Português</option>
-  <option value="ar-SA">العربية</option>
-  <option value="hi-IN">हिन्दी</option>
-  <option value="zh-CN">中文</option>
-</select>
+      <option value="auto">🌍 Auto language</option>
+      <option value="en-US">English</option>
+      <option value="de-DE">Deutsch</option>
+      <option value="ru-RU">Русский</option>
+      <option value="uz-UZ">Oʻzbek</option>
+      <option value="tg-TJ">Тоҷикӣ</option>
+      <option value="uk-UA">Українська</option>
+      <option value="pl-PL">Polski</option>
+      <option value="tr-TR">Türkçe</option>
+      <option value="fr-FR">Français</option>
+      <option value="es-ES">Español</option>
+      <option value="it-IT">Italiano</option>
+      <option value="pt-PT">Português</option>
+      <option value="ar-SA">العربية</option>
+      <option value="hi-IN">हिन्दी</option>
+      <option value="zh-CN">中文</option>
+    </select>
 
     <div class="daily-card">
-      <small>Today’s Opportunity</small>
-      <h2>Open your next growth path with AI.</h2>
+      <small>🔥 Daily Opportunity</small>
+      <h2 id="opportunityText">Open your next growth path with AI.</h2>
     </div>
 
-    <div class="daily-card" id="missionCard">
-  <small>Today's Mission</small>
-  <h2 id="missionText">
-    Complete one small action to improve your future today.
-  </h2>
-</div>
+    <div class="daily-card">
+      <small>🎯 Today's Mission</small>
+      <h2 id="missionText">Complete one small action to improve your future today.</h2>
+    </div>
 
-    <button id="dailyIdeaBtn" class="primary">
-🔥 Daily Money Idea
-</button>
-    
+    <div class="stats">
+      <div class="stat-card" id="xpBox">Growth XP: 0</div>
+      <div class="stat-card" id="streakBox">🔥 Streak: 1</div>
+    </div>
+
+    <button id="dailyIdeaBtn" class="primary">🔥 New Daily Idea</button>
+
     <textarea id="userInput" placeholder="Speak or type your question..."></textarea>
 
     <div class="buttons">
-      <button id="voiceBtn">Voice</button>
+      <button id="voiceBtn" class="voice-main">🎙 Voice</button>
       <button id="clearBtn">Clear</button>
       <button id="shareBtn">Share</button>
       <button class="primary" id="generateBtn">Generate Growth Plan</button>
     </div>
 
-    <script>
-const translations = {
-  "ru-RU": {
-    voice: "Голос",
-    clear: "Очистить",
-    share: "Поделиться",
-    generate: "Создать план"
-    today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-    
-  },
-  "en-US": {
-    voice: "Voice",
-    clear: "Clear",
-    share: "Share",
-    generate: "Generate Plan"
-    today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-  },
-  "de-DE": {
-    voice: "Sprache",
-    clear: "Löschen",
-    share: "Teilen",
-    generate: "Plan erstellen"
-    today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-  },
-  "uz-UZ": {
-    voice: "Ovoz",
-    clear: "Tozalash",
-    share: "Ulashish",
-    generate: "Reja yaratish"
-    today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-  },
-  "tg-TJ": {
-    voice: "Овоз",
-    clear: "Тоза кардан",
-    share: "Мубодила",
-    generate: "Нақша сохтан"
-      today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-  },
-  "uk-UA": {
-  voice: "Голос",
-  clear: "Очистити",
-  share: "Поділитися",
-  generate: "Створити план"
-    today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"pl-PL": {
-  voice: "Głos",
-  clear: "Wyczyść",
-  share: "Udostępnij",
-  generate: "Stwórz plan"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"tr-TR": {
-  voice: "Ses",
-  clear: "Temizle",
-  share: "Paylaş",
-  generate: "Plan oluştur"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"fr-FR": {
-  voice: "Voix",
-  clear: "Effacer",
-  share: "Partager",
-  generate: "Créer un plan"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"es-ES": {
-  voice: "Voz",
-  clear: "Limpiar",
-  share: "Compartir",
-  generate: "Crear plan"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"it-IT": {
-  voice: "Voce",
-  clear: "Cancella",
-  share: "Condividi",
-  generate: "Crea piano"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"pt-PT": {
-  voice: "Voz",
-  clear: "Limpar",
-  share: "Compartilhar",
-  generate: "Criar plano"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"ar-SA": {
-  voice: "صوت",
-  clear: "مسح",
-  share: "مشاركة",
-  generate: "إنشاء خطة"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"hi-IN": {
-  voice: "आवाज़",
-  clear: "साफ करें",
-  share: "शेयर",
-  generate: "योजना बनाएं"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-},
-
-"zh-CN": {
-  voice: "语音",
-  clear: "清除",
-  share: "分享",
-  generate: "生成计划"
-  today: "Сегодняшняя возможность",
-idea: "💡 Идея дня",
-placeholder: "Скажите или напишите вопрос...",
-welcome: "Добро пожаловать в SylNex AI."
-}
-};
-
-      const savedLang = localStorage.getItem("sylnexLanguage");
-const browserLang = savedLang || navigator.language;
-
-if (translations[browserLang]) {
-  languageSelect.value = browserLang;
-
-  const t = translations[browserLang];
-
-  voiceBtn.innerText = t.voice;
-  clearBtn.innerText = t.clear;
-  shareBtn.innerText = t.share;
-  generateBtn.innerText = t.generate;
-}
-      
-languageSelect.addEventListener("change", () => {
-  const lang = languageSelect.value;
-  localStorage.setItem("sylnexLanguage", lang);
-  const t = translations[lang];
-
-  if (t) {
-    voiceBtn.innerText = t.voice;
-    clearBtn.innerText = t.clear;
-    shareBtn.innerText = t.share;
-    generateBtn.innerText = t.generate;
-  }
-});
-</script>
-
     <div class="result" id="result">
 Welcome to SylNex AI.
 
-      
-      <div id="loading" style="display:none; text-align:center; margin-top:10px;">
-AI is thinking...
-</div>
-
 Ask about money, business, content, ideas, growth, or your next step.
     </div>
-
-    <div class="xp" id="xpBox">Growth XP: 0</div>
   </div>
 
   <script>
     const userInput = document.getElementById("userInput");
-    const result = document.getElementById("result");
-    const voiceBtn = document.getElementById("voiceBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const generateBtn = document.getElementById("generateBtn");
-    const xpBox = document.getElementById("xpBox");
-    const dailyCard = document.querySelector(".daily-card h2");
-
-    const dailyIdeaBtn = document.getElementById("dailyIdeaBtn");
-    
-    let xp = 0;
-
-    let streak = Number(localStorage.getItem("sylnexStreak")) || 1;
-
-    const today = new Date().toDateString();
-const lastVisit = localStorage.getItem("sylnexLastVisit");
-
-if (lastVisit !== today) {
-  streak += 1;
-  localStorage.setItem("sylnexStreak", streak);
-  localStorage.setItem("sylnexLastVisit", today);
-}
-
-const streakBox = document.createElement("div");
-
-streakBox.style.marginTop = "10px";
-streakBox.style.textAlign = "center";
-streakBox.style.color = "#00e5ff";
-streakBox.style.fontWeight = "bold";
-
-streakBox.innerText = "🔥 Daily Streak: " + streak;
-
-document.querySelector(".xp").after(streakBox);
-    
-    const opportunities = [
-  "Start a local delivery service in your city.",
-  "Use AI tools to create TikTok videos for businesses.",
-  "Offer translation help for migrants in Germany.",
-  "Create simple websites for local shops.",
-  "Sell digital products online using AI.",
-  "Help elderly people with smartphones and technology.",
-  "Start a mobile car cleaning service.",
-  "Use ChatGPT to write CVs and job applications.",
-  "Become a freelance content creator.",
-  "Record motivational videos in your native language."
-];
-
-    const missions = [
-  "Learn one new AI tool today.",
-  "Ask AI for one business idea.",
-  "Watch one video about making money online.",
-  "Improve your CV today.",
-  "Post one useful idea on social media.",
-  "Learn 5 new German words.",
-  "Search for one new opportunity today.",
-  "Write one small business plan.",
-  "Help someone using AI.",
-  "Take one step toward your future."
-];
-
-const missionText = document.getElementById("missionText");
-
-missionText.innerText =
-  missions[Math.floor(Math.random() * missions.length)];
-
-    dailyIdeaBtn.addEventListener("click", function () {
-  dailyCard.innerText =
-    opportunities[Math.floor(Math.random() * opportunities.length)];
-
-  xp += 3;
-  xpBox.innerText = "Growth XP: " + xp;
-
-if (xp >= 20) {
-  result.innerText = "🔥 You reached Growth Level 2!";
-}
-
-if (xp >= 50) {
-  result.innerText = "🚀 You unlocked AI Hustler Mode!";
-}
-});
-
-dailyCard.innerText =
-  opportunities[Math.floor(Math.random() * opportunities.length)];
-
-    clearBtn.addEventListener("click", function () {
-      userInput.value = "";
-      
-      xp += 1;
-xpBox.innerText = "Growth XP: " + xp;
-      result.innerText = "Ready for your next opportunity.";
-    });
-
-const shareBtn = document.getElementById("shareBtn");
-
-shareBtn.addEventListener("click", async function () {
-
-  const text = result.innerText;
-
-  if (!text) return;
-
-  if (navigator.share) {
-
-    try {
-
-      await navigator.share({
-        title: "SylNex AI",
-        text: text
-      });
-
-    } catch (err) {
-      console.log(err);
-    }
-
-  } else {
-
-    navigator.clipboard.writeText(text);
-
-    shareBtn.innerText = "Copied!";
-
-    setTimeout(() => {
-      shareBtn.innerText = "Share";
-    }, 2000);
-  }
-});
-    
-    generateBtn.addEventListener("click", async function () {
-      const text = userInput.value.trim();
-
-      if (!text) {
-        result.innerText = "Tell me what you want to improve, earn, build, or understand.";
-        return;
-      }
-
-      result.innerText = "AI is scanning opportunities for you...";
-
-      try {
-        const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-         body: JSON.stringify({
-  prompt:
-    "Selected language: " +
-    languageSelect.value +
-    ". Answer strictly in this selected language.
-    If selected language is auto, answer in the same language as the user.
-    Give 3 practical money/growth opportunities, short action plan and one next step. User says: " +
-    text
-}),
-
-        const data = await response.json();
-
-        const shareBtn = document.getElementById("shareBtn");
-
-shareBtn.addEventListener("click", async function () {
-
-  const text = result.innerText;
-
-  if (!text) return;
-
-  if (navigator.share) {
-
-    try {
-
-      await navigator.share({
-        title: "SylNex AI",
-        text: text
-      });
-
-    } catch (err) {
-      console.log(err);
-    }
-
-  } else {
-
-    navigator.clipboard.writeText(text);
-
-    shareBtn.innerText = "Copied!";
-
-    setTimeout(() => {
-      shareBtn.innerText = "Share";
-    }, 2000);
-  }
-});
-        xp += 5;
-        xpBox.innerText = "Growth XP: " + xp + "  +5";
-      } catch (error) {
-        result.innerText = "Connection error. Please try again.";
-      }
-    });
-
-    if ("webkitSpeechRecognition" in window) {
-      const recognition = new webkitSpeechRecognition();
-
-      recognition.lang = languageSelect.value || "ru-RU";
-recognition.continuous = false;
-recognition.interimResults = false;
-
-      voiceBtn.addEventListener("click", function () {
-        voiceBtn.innerText = "Listening...";
-        recognition.start();
-      });
-
-      recognition.onresult = function (event) {
-        userInput.value = event.results[0][0].transcript;
-        voiceBtn.innerText = "Voice";
-      };
-
-      recognition.onerror = function () {
-        voiceBtn.innerText = "Voice";
-        result.innerText = "Microphone error. Please try again.";
-      };
-
-      recognition.onend = function () {
-        voiceBtn.innerText = "Voice";
-      };
-    } else {
-      voiceBtn.addEventListener("click", function () {
-        result.innerText = "Voice is not supported in this browser. Try Chrome.";
-      });
-    }
-  </script>
-</body>
-</html>
+    const result = document
