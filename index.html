@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SylNex AI</title>
 
 <style>
@@ -18,6 +18,7 @@ select{width:100%;margin-bottom:16px;padding:13px;border-radius:16px;border:none
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 .stat-card{background:rgba(0,0,0,.30);border-radius:18px;padding:14px;text-align:center;color:#00e5ff;font-weight:bold}
 .level{margin-bottom:14px;padding:13px;border-radius:18px;background:rgba(255,255,255,.12);text-align:center;font-weight:800;color:#ffe97a}
+.limit-note{margin-bottom:14px;text-align:center;font-size:12px;color:#cbd5ff}
 textarea{width:100%;min-height:115px;background:rgba(0,0,0,.35);color:white;border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:16px;font-size:16px;resize:none;outline:none;margin-bottom:14px}
 textarea::placeholder{color:#b9c3e6}
 .buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
@@ -27,6 +28,7 @@ button:active{transform:scale(.97)}
 .voice-main{background:linear-gradient(135deg,#ff7a18,#ff00cc);box-shadow:0 0 35px rgba(255,0,204,.35)}
 .result{min-height:160px;background:rgba(0,0,0,.30);border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:18px;line-height:1.6;color:#eef3ff;white-space:pre-wrap;max-height:320px;overflow-y:auto}
 .footer-note{margin-top:12px;text-align:center;font-size:12px;color:#aeb8e8}
+.hidden{display:none}
 </style>
 </head>
 
@@ -36,7 +38,7 @@ button:active{transform:scale(.97)}
   <div class="subtitle" id="subtitle"></div>
 
   <select id="languageSelect">
-    <option value="auto">🌍 Auto language</option>
+    <option value="auto">🌍 Auto / English</option>
     <option value="en-US">English</option>
     <option value="de-DE">Deutsch</option>
     <option value="ru-RU">Русский</option>
@@ -52,6 +54,12 @@ button:active{transform:scale(.97)}
     <option value="ar-SA">العربية</option>
     <option value="hi-IN">हिन्दी</option>
     <option value="zh-CN">中文</option>
+    <option value="fa-IR">فارسی</option>
+    <option value="kk-KZ">Қазақша</option>
+    <option value="ky-KG">Кыргызча</option>
+    <option value="az-AZ">Azərbaycanca</option>
+    <option value="ro-RO">Română</option>
+    <option value="bg-BG">Български</option>
   </select>
 
   <div class="daily-card">
@@ -70,6 +78,7 @@ button:active{transform:scale(.97)}
   </div>
 
   <div class="level" id="levelBox"></div>
+  <div class="limit-note" id="limitNote"></div>
 
   <button id="dailyIdeaBtn" class="primary"></button>
 
@@ -87,77 +96,58 @@ button:active{transform:scale(.97)}
 </div>
 
 <script>
-const languageSelect=document.getElementById("languageSelect");
-const subtitle=document.getElementById("subtitle");
-const opportunityTitle=document.getElementById("opportunityTitle");
-const opportunityText=document.getElementById("opportunityText");
-const missionTitle=document.getElementById("missionTitle");
-const missionText=document.getElementById("missionText");
-const xpBox=document.getElementById("xpBox");
-const streakBox=document.getElementById("streakBox");
-const levelBox=document.getElementById("levelBox");
-const dailyIdeaBtn=document.getElementById("dailyIdeaBtn");
-const userInput=document.getElementById("userInput");
-const voiceBtn=document.getElementById("voiceBtn");
-const clearBtn=document.getElementById("clearBtn");
-const shareBtn=document.getElementById("shareBtn");
-const generateBtn=document.getElementById("generateBtn");
-const result=document.getElementById("result");
-const footerNote=document.getElementById("footerNote");
+const $=id=>document.getElementById(id);
+const languageSelect=$("languageSelect"),subtitle=$("subtitle"),opportunityTitle=$("opportunityTitle"),opportunityText=$("opportunityText"),missionTitle=$("missionTitle"),missionText=$("missionText"),xpBox=$("xpBox"),streakBox=$("streakBox"),levelBox=$("levelBox"),limitNote=$("limitNote"),dailyIdeaBtn=$("dailyIdeaBtn"),userInput=$("userInput"),voiceBtn=$("voiceBtn"),clearBtn=$("clearBtn"),shareBtn=$("shareBtn"),generateBtn=$("generateBtn"),result=$("result"),footerNote=$("footerNote");
 
-const L={
-"en-US":{name:"English",sub:"Your daily growth companion",op:"🔥 Daily Opportunity",mi:"🎯 Today's Mission",xp:"Growth XP",st:"🔥 Streak",lv1:"Level 1 · Explorer",lv2:"Level 2 · Builder",lv3:"Level 3 · Hustler",new:"🔥 New Daily Idea",voice:"🎙 Voice",stop:"⏹ Stop",clear:"Clear",share:"Share",gen:"Generate Growth Plan",ph:"Speak or type your question...",wel:"Welcome to SylNex AI.\n\nAsk about money, business, ideas, growth, or your next step.",empty:"Tell me what you want to improve, earn, build, or understand.",load:"AI is thinking and looking for fresh ideas...",err:"Connection error. Please try again.",mic:"Microphone error. Please try again.",nov:"Voice is not supported in this browser. Try Chrome.",copy:"Copied!",foot:"Small steps every day. Big changes over time.",ops:["Find one small earning opportunity today.","Create one useful post for social media.","Improve your profile or CV in 10 minutes.","Find one local problem you can solve.","Learn one useful skill today."],mis:["Ask AI for one money idea.","Write one small plan.","Learn 5 useful words.","Share one useful idea.","Do one step for your future today."]},
-
-"ru-RU":{name:"Russian",sub:"Твой ежедневный AI-помощник для роста",op:"🔥 Возможность дня",mi:"🎯 Миссия дня",xp:"Рост XP",st:"🔥 Серия",lv1:"Уровень 1 · Исследователь",lv2:"Уровень 2 · Создатель",lv3:"Уровень 3 · Добытчик",new:"🔥 Новая идея дня",voice:"🎙 Голос",stop:"⏹ Стоп",clear:"Очистить",share:"Поделиться",gen:"Создать план роста",ph:"Скажите или напишите вопрос...",wel:"Добро пожаловать в SylNex AI.\n\nСпросите про деньги, бизнес, идеи, рост или следующий шаг.",empty:"Напишите, что вы хотите улучшить, заработать, построить или понять.",load:"AI думает и ищет свежие идеи...",err:"Ошибка соединения. Попробуйте ещё раз.",mic:"Ошибка микрофона. Попробуйте ещё раз.",nov:"Голос не поддерживается. Попробуйте Chrome.",copy:"Скопировано!",foot:"Маленькие шаги каждый день. Большие изменения со временем.",ops:["Найдите одну маленькую возможность заработать сегодня.","Придумайте один полезный пост для соцсетей.","Улучшите CV или профиль за 10 минут.","Найдите проблему людей рядом с вами.","Выучите один полезный навык сегодня."],mis:["Спросите AI одну идею заработка.","Напишите маленький план.","Выучите 5 полезных слов.","Поделитесь одной полезной идеей.","Сделайте один шаг для будущего."]},
-
-"de-DE":{name:"German",sub:"Dein täglicher AI-Begleiter für Wachstum",op:"🔥 Chance des Tages",mi:"🎯 Mission des Tages",xp:"Wachstum XP",st:"🔥 Serie",lv1:"Level 1 · Entdecker",lv2:"Level 2 · Macher",lv3:"Level 3 · Hustler",new:"🔥 Neue Tagesidee",voice:"🎙 Sprache",stop:"⏹ Stopp",clear:"Löschen",share:"Teilen",gen:"Wachstumsplan erstellen",ph:"Sprich oder schreibe deine Frage...",wel:"Willkommen bei SylNex AI.\n\nFrage nach Geld, Business, Ideen oder deinem nächsten Schritt.",empty:"Sag, was du verbessern, verdienen oder aufbauen möchtest.",load:"AI sucht frische Ideen für dich...",err:"Verbindungsfehler. Bitte erneut versuchen.",mic:"Mikrofonfehler. Bitte erneut versuchen.",nov:"Sprache wird nicht unterstützt. Versuche Chrome.",copy:"Kopiert!",foot:"Kleine Schritte jeden Tag. Große Veränderungen mit der Zeit.",ops:["Finde heute eine kleine Verdienstmöglichkeit.","Erstelle einen nützlichen Social-Media-Beitrag.","Verbessere deinen Lebenslauf in 10 Minuten.","Finde ein lokales Problem, das du lösen kannst.","Lerne heute eine nützliche Fähigkeit."],mis:["Frage AI nach einer Geldidee.","Schreibe einen kleinen Plan.","Lerne 5 nützliche Wörter.","Teile eine nützliche Idee.","Mach heute einen Schritt für deine Zukunft."]},
-
-"uz-UZ":{name:"Uzbek",sub:"Har kunlik AI rivojlanish yordamchingiz",op:"🔥 Kunning imkoniyati",mi:"🎯 Kunning vazifasi",xp:"Rivoj XP",st:"🔥 Ketma-ketlik",lv1:"1-daraja · Izlanuvchi",lv2:"2-daraja · Yaratuvchi",lv3:"3-daraja · Harakatchan",new:"🔥 Yangi kunlik g‘oya",voice:"🎙 Ovoz",stop:"⏹ To‘xtatish",clear:"Tozalash",share:"Ulashish",gen:"Rivojlanish rejasini yaratish",ph:"Savolingizni ayting yoki yozing...",wel:"SylNex AI ga xush kelibsiz.\n\nPul, biznes, g‘oyalar, rivojlanish yoki keyingi qadam haqida so‘rang.",empty:"Nimani yaxshilash, topish yoki qurishni xohlaysiz?",load:"AI siz uchun yangi g‘oyalarni qidirmoqda...",err:"Ulanishda xatolik. Qayta urinib ko‘ring.",mic:"Mikrofon xatosi. Qayta urinib ko‘ring.",nov:"Ovoz bu brauzerda ishlamaydi. Chrome ni sinab ko‘ring.",copy:"Nusxalandi!",foot:"Har kuni kichik qadamlar. Vaqt o‘tib katta o‘zgarishlar.",ops:["Bugun kichik daromad imkoniyatini toping.","Ijtimoiy tarmoqlar uchun foydali post yarating.","CV yoki profilingizni 10 daqiqada yaxshilang.","Atrofingizdagi muammoni toping.","Bugun foydali ko‘nikma o‘rganing."],mis:["AI dan bitta daromad g‘oyasini so‘rang.","Kichik reja yozing.","5 ta foydali so‘z o‘rganing.","Bitta foydali g‘oya ulashing.","Kelajagingiz uchun bitta qadam qiling."]},
-
-"tg-TJ":{name:"Tajik",sub:"Ёрдамчии ҳаррӯзаи AI барои рушди шумо",op:"🔥 Имконияти рӯз",mi:"🎯 Вазифаи рӯз",xp:"Рушд XP",st:"🔥 Пайдарпайӣ",lv1:"Сатҳ 1 · Ҷустуҷӯгар",lv2:"Сатҳ 2 · Созанда",lv3:"Сатҳ 3 · Фаъол",new:"🔥 Идеяи нави рӯз",voice:"🎙 Овоз",stop:"⏹ Ист",clear:"Тоза кардан",share:"Мубодила",gen:"Сохтани нақшаи рушд",ph:"Саволро гӯед ё нависед...",wel:"Хуш омадед ба SylNex AI.\n\nДар бораи пул, бизнес, идеяҳо, рушд ё қадами оянда пурсед.",empty:"Нависед, чӣ мехоҳед беҳтар кунед, ба даст оред ё созед.",load:"AI барои шумо идеяҳои нав меҷӯяд...",err:"Хатои пайвастшавӣ. Бори дигар кӯшиш кунед.",mic:"Хатои микрофон. Бори дигар кӯшиш кунед.",nov:"Овоз дар ин браузер дастгирӣ намешавад. Chrome-ро санҷед.",copy:"Нусха шуд!",foot:"Ҳар рӯз қадамҳои хурд. Бо вақт тағйироти калон.",ops:["Имрӯз як имконияти хурди даромад пайдо кунед.","Барои шабакаҳои иҷтимоӣ як пост созед.","CV ё профили худро дар 10 дақиқа беҳтар кунед.","Як мушкили маҳаллиро пайдо кунед.","Имрӯз як малакаи муфид омӯзед."],mis:["Аз AI як идеяи пулкоркунӣ пурсед.","Як нақшаи хурд нависед.","5 калимаи муфид омӯзед.","Як идеяи муфид мубодила кунед.","Имрӯз як қадам барои оянда кунед."]},
-
-"uk-UA":{name:"Ukrainian",sub:"Твій щоденний AI-помічник для росту",op:"🔥 Можливість дня",mi:"🎯 Місія дня",xp:"Ріст XP",st:"🔥 Серія",lv1:"Рівень 1 · Дослідник",lv2:"Рівень 2 · Творець",lv3:"Рівень 3 · Хастлер",new:"🔥 Нова ідея дня",voice:"🎙 Голос",stop:"⏹ Стоп",clear:"Очистити",share:"Поділитися",gen:"Створити план росту",ph:"Скажіть або напишіть питання...",wel:"Ласкаво просимо до SylNex AI.\n\nЗапитайте про гроші, бізнес, ідеї, розвиток або наступний крок.",empty:"Напишіть, що хочете покращити, заробити або створити.",load:"AI шукає для вас свіжі ідеї...",err:"Помилка з’єднання. Спробуйте ще раз.",mic:"Помилка мікрофона. Спробуйте ще раз.",nov:"Голос не підтримується. Спробуйте Chrome.",copy:"Скопійовано!",foot:"Малі кроки щодня. Великі зміни з часом.",ops:["Знайдіть сьогодні одну малу можливість заробітку.","Створіть один корисний пост.","Покращіть CV або профіль за 10 хвилин.","Знайдіть локальну проблему.","Вивчіть одну корисну навичку."],mis:["Запитайте AI одну ідею заробітку.","Напишіть маленький план.","Вивчіть 5 корисних слів.","Поділіться корисною ідеєю.","Зробіть один крок для майбутнього."]},
-
-"pl-PL":{name:"Polish",sub:"Twój codzienny AI towarzysz rozwoju",op:"🔥 Szansa dnia",mi:"🎯 Misja dnia",xp:"Rozwój XP",st:"🔥 Seria",lv1:"Poziom 1 · Odkrywca",lv2:"Poziom 2 · Twórca",lv3:"Poziom 3 · Hustler",new:"🔥 Nowy pomysł dnia",voice:"🎙 Głos",stop:"⏹ Stop",clear:"Wyczyść",share:"Udostępnij",gen:"Stwórz plan rozwoju",ph:"Powiedz lub wpisz pytanie...",wel:"Witamy w SylNex AI.\n\nZapytaj o pieniądze, biznes, pomysły lub następny krok.",empty:"Napisz, co chcesz poprawić, zarobić albo zbudować.",load:"AI szuka świeżych pomysłów...",err:"Błąd połączenia. Spróbuj ponownie.",mic:"Błąd mikrofonu. Spróbuj ponownie.",nov:"Głos nie jest obsługiwany. Spróbuj Chrome.",copy:"Skopiowano!",foot:"Małe kroki każdego dnia. Wielkie zmiany z czasem.",ops:["Znajdź dziś małą możliwość zarobku.","Stwórz jeden użyteczny post.","Popraw CV lub profil w 10 minut.","Znajdź lokalny problem.","Naucz się jednej przydatnej umiejętności."],mis:["Zapytaj AI o pomysł na zarobek.","Napisz mały plan.","Naucz się 5 słów.","Udostępnij jedną przydatną ideę.","Zrób jeden krok dla przyszłości."]},
-
-"tr-TR":{name:"Turkish",sub:"Günlük AI gelişim yol arkadaşın",op:"🔥 Günün fırsatı",mi:"🎯 Günün görevi",xp:"Gelişim XP",st:"🔥 Seri",lv1:"Seviye 1 · Kaşif",lv2:"Seviye 2 · Üretici",lv3:"Seviye 3 · Hustler",new:"🔥 Yeni günlük fikir",voice:"🎙 Ses",stop:"⏹ Durdur",clear:"Temizle",share:"Paylaş",gen:"Gelişim planı oluştur",ph:"Sorunu söyle veya yaz...",wel:"SylNex AI’ye hoş geldin.\n\nPara, iş, fikirler, gelişim veya sonraki adım hakkında sor.",empty:"Neyi geliştirmek, kazanmak veya kurmak istiyorsun?",load:"AI senin için yeni fikirler arıyor...",err:"Bağlantı hatası. Tekrar dene.",mic:"Mikrofon hatası. Tekrar dene.",nov:"Ses bu tarayıcıda desteklenmiyor. Chrome dene.",copy:"Kopyalandı!",foot:"Her gün küçük adımlar. Zamanla büyük değişimler.",ops:["Bugün küçük bir kazanç fırsatı bul.","Sosyal medya için faydalı bir gönderi oluştur.","CV veya profilini 10 dakikada geliştir.","Yerel bir problem bul.","Bugün faydalı bir beceri öğren."],mis:["AI’dan bir para kazanma fikri iste.","Küçük bir plan yaz.","5 faydalı kelime öğren.","Bir faydalı fikir paylaş.","Geleceğin için bir adım at."]},
-
-"fr-FR":{name:"French",sub:"Ton compagnon AI quotidien de croissance",op:"🔥 Opportunité du jour",mi:"🎯 Mission du jour",xp:"Croissance XP",st:"🔥 Série",lv1:"Niveau 1 · Explorateur",lv2:"Niveau 2 · Créateur",lv3:"Niveau 3 · Hustler",new:"🔥 Nouvelle idée du jour",voice:"🎙 Voix",stop:"⏹ Stop",clear:"Effacer",share:"Partager",gen:"Créer un plan de croissance",ph:"Parle ou écris ta question...",wel:"Bienvenue sur SylNex AI.\n\nPose une question sur l’argent, le business, les idées ou ta prochaine étape.",empty:"Dis ce que tu veux améliorer, gagner ou construire.",load:"AI cherche des idées fraîches pour toi...",err:"Erreur de connexion. Réessaie.",mic:"Erreur de microphone. Réessaie.",nov:"La voix n’est pas prise en charge. Essaie Chrome.",copy:"Copié!",foot:"Petits pas chaque jour. Grands changements avec le temps.",ops:["Trouve aujourd’hui une petite opportunité de revenu.","Crée une publication utile.","Améliore ton CV ou profil en 10 minutes.","Trouve un problème local à résoudre.","Apprends une compétence utile aujourd’hui."],mis:["Demande à AI une idée de revenu.","Écris un petit plan.","Apprends 5 mots utiles.","Partage une idée utile.","Fais un pas pour ton avenir."]},
-
-"es-ES":{name:"Spanish",sub:"Tu compañero diario de crecimiento con AI",op:"🔥 Oportunidad del día",mi:"🎯 Misión del día",xp:"Crecimiento XP",st:"🔥 Racha",lv1:"Nivel 1 · Explorador",lv2:"Nivel 2 · Creador",lv3:"Nivel 3 · Hustler",new:"🔥 Nueva idea del día",voice:"🎙 Voz",stop:"⏹ Parar",clear:"Limpiar",share:"Compartir",gen:"Crear plan de crecimiento",ph:"Habla o escribe tu pregunta...",wel:"Bienvenido a SylNex AI.\n\nPregunta sobre dinero, negocios, ideas, crecimiento o tu próximo paso.",empty:"Escribe qué quieres mejorar, ganar o construir.",load:"AI está buscando ideas nuevas para ti...",err:"Error de conexión. Inténtalo otra vez.",mic:"Error de micrófono. Inténtalo otra vez.",nov:"La voz no es compatible. Prueba Chrome.",copy:"Copiado!",foot:"Pequeños pasos cada día. Grandes cambios con el tiempo.",ops:["Encuentra hoy una pequeña oportunidad de ganar dinero.","Crea una publicación útil.","Mejora tu CV o perfil en 10 minutos.","Encuentra un problema local que puedas resolver.","Aprende una habilidad útil hoy."],mis:["Pregunta a AI una idea para ganar dinero.","Escribe un pequeño plan.","Aprende 5 palabras útiles.","Comparte una idea útil.","Da un paso para tu futuro."]},
-
-"it-IT":{name:"Italian",sub:"Il tuo compagno AI quotidiano per crescere",op:"🔥 Opportunità del giorno",mi:"🎯 Missione del giorno",xp:"Crescita XP",st:"🔥 Serie",lv1:"Livello 1 · Esploratore",lv2:"Livello 2 · Creatore",lv3:"Livello 3 · Hustler",new:"🔥 Nuova idea del giorno",voice:"🎙 Voce",stop:"⏹ Stop",clear:"Cancella",share:"Condividi",gen:"Crea piano di crescita",ph:"Parla o scrivi la tua domanda...",wel:"Benvenuto in SylNex AI.\n\nChiedi di soldi, business, idee, crescita o prossimo passo.",empty:"Scrivi cosa vuoi migliorare, guadagnare o costruire.",load:"AI cerca idee fresche per te...",err:"Errore di connessione. Riprova.",mic:"Errore microfono. Riprova.",nov:"Voce non supportata. Prova Chrome.",copy:"Copiato!",foot:"Piccoli passi ogni giorno. Grandi cambiamenti nel tempo.",ops:["Trova oggi una piccola opportunità di guadagno.","Crea un post utile.","Migliora CV o profilo in 10 minuti.","Trova un problema locale da risolvere.","Impara oggi una competenza utile."],mis:["Chiedi ad AI un’idea per guadagnare.","Scrivi un piccolo piano.","Impara 5 parole utili.","Condividi un’idea utile.","Fai un passo per il tuo futuro."]},
-
-"pt-PT":{name:"Portuguese",sub:"O teu companheiro diário de crescimento com AI",op:"🔥 Oportunidade do dia",mi:"🎯 Missão do dia",xp:"Crescimento XP",st:"🔥 Série",lv1:"Nível 1 · Explorador",lv2:"Nível 2 · Criador",lv3:"Nível 3 · Hustler",new:"🔥 Nova ideia do dia",voice:"🎙 Voz",stop:"⏹ Parar",clear:"Limpar",share:"Partilhar",gen:"Criar plano de crescimento",ph:"Fala ou escreve a tua pergunta...",wel:"Bem-vindo ao SylNex AI.\n\nPergunta sobre dinheiro, negócios, ideias, crescimento ou próximo passo.",empty:"Escreve o que queres melhorar, ganhar ou construir.",load:"AI está a procurar novas ideias...",err:"Erro de ligação. Tenta novamente.",mic:"Erro de microfone. Tenta novamente.",nov:"Voz não suportada. Tenta Chrome.",copy:"Copiado!",foot:"Pequenos passos todos os dias. Grandes mudanças com o tempo.",ops:["Encontra hoje uma pequena oportunidade de rendimento.","Cria uma publicação útil.","Melhora o CV ou perfil em 10 minutos.","Encontra um problema local.","Aprende uma competência útil hoje."],mis:["Pergunta à AI uma ideia para ganhar dinheiro.","Escreve um pequeno plano.","Aprende 5 palavras úteis.","Partilha uma ideia útil.","Dá um passo pelo teu futuro."]},
-
-"ar-SA":{name:"Arabic",sub:"رفيقك اليومي للنمو بالذكاء الاصطناعي",op:"🔥 فرصة اليوم",mi:"🎯 مهمة اليوم",xp:"نقاط النمو",st:"🔥 السلسلة",lv1:"المستوى 1 · مستكشف",lv2:"المستوى 2 · صانع",lv3:"المستوى 3 · نشيط",new:"🔥 فكرة يومية جديدة",voice:"🎙 صوت",stop:"⏹ توقف",clear:"مسح",share:"مشاركة",gen:"إنشاء خطة نمو",ph:"قل أو اكتب سؤالك...",wel:"مرحباً بك في SylNex AI.\n\nاسأل عن المال، العمل، الأفكار، النمو أو خطوتك التالية.",empty:"اكتب ما تريد تحسينه أو كسبه أو بناؤه.",load:"AI يبحث لك عن أفكار جديدة...",err:"خطأ في الاتصال. حاول مرة أخرى.",mic:"خطأ في الميكروفون. حاول مرة أخرى.",nov:"الصوت غير مدعوم. جرّب Chrome.",copy:"تم النسخ!",foot:"خطوات صغيرة كل يوم. تغييرات كبيرة مع الوقت.",ops:["ابحث اليوم عن فرصة صغيرة للربح.","أنشئ منشوراً مفيداً.","حسّن سيرتك الذاتية خلال 10 دقائق.","ابحث عن مشكلة محلية يمكنك حلها.","تعلّم مهارة مفيدة اليوم."],mis:["اسأل AI عن فكرة للربح.","اكتب خطة صغيرة.","تعلّم 5 كلمات مفيدة.","شارك فكرة مفيدة.","افعل خطوة واحدة لمستقبلك."]},
-
-"hi-IN":{name:"Hindi",sub:"आपका दैनिक AI विकास साथी",op:"🔥 आज का अवसर",mi:"🎯 आज का मिशन",xp:"Growth XP",st:"🔥 Streak",lv1:"Level 1 · Explorer",lv2:"Level 2 · Builder",lv3:"Level 3 · Hustler",new:"🔥 नई दैनिक आइडिया",voice:"🎙 आवाज़",stop:"⏹ रोकें",clear:"साफ करें",share:"शेयर",gen:"Growth Plan बनाएं",ph:"अपना सवाल बोलें या लिखें...",wel:"SylNex AI में आपका स्वागत है.\n\nपैसा, बिजनेस, आइडिया, ग्रोथ या अगले कदम के बारे में पूछें.",empty:"लिखें कि आप क्या सुधारना, कमाना या बनाना चाहते हैं.",load:"AI आपके लिए नए आइडिया खोज रहा है...",err:"कनेक्शन त्रुटि. फिर कोशिश करें.",mic:"माइक्रोफोन त्रुटि. फिर कोशिश करें.",nov:"Voice समर्थित नहीं है. Chrome आज़माएं.",copy:"कॉपी हो गया!",foot:"हर दिन छोटे कदम. समय के साथ बड़े बदलाव.",ops:["आज कमाई का एक छोटा अवसर खोजें.","एक उपयोगी सोशल पोस्ट बनाएं.","अपना CV या प्रोफ़ाइल 10 मिनट में सुधारें.","एक स्थानीय समस्या खोजें.","आज एक उपयोगी कौशल सीखें."],mis:["AI से कमाई का एक आइडिया पूछें.","एक छोटा प्लान लिखें.","5 उपयोगी शब्द सीखें.","एक उपयोगी आइडिया शेयर करें.","भविष्य के लिए एक कदम उठाएं."]},
-
-"zh-CN":{name:"Chinese",sub:"你的每日 AI 成长伙伴",op:"🔥 今日机会",mi:"🎯 今日任务",xp:"成长 XP",st:"🔥 连续天数",lv1:"等级 1 · 探索者",lv2:"等级 2 · 建造者",lv3:"等级 3 · 行动者",new:"🔥 新的每日想法",voice:"🎙 语音",stop:"⏹ 停止",clear:"清除",share:"分享",gen:"生成成长计划",ph:"说出或输入你的问题...",wel:"欢迎使用 SylNex AI。\n\n询问赚钱、商业、想法、成长或下一步。",empty:"写下你想改进、赚钱或建立什么。",load:"AI 正在为你寻找新想法...",err:"连接错误。请重试。",mic:"麦克风错误。请重试。",nov:"此浏览器不支持语音。请尝试 Chrome。",copy:"已复制!",foot:"每天小步骤，长期大改变。",ops:["今天找到一个小的赚钱机会。","创建一个有用的社交媒体帖子。","用 10 分钟改进简历或资料。","找到一个本地问题并解决。","今天学习一个有用技能。"],mis:["向 AI 询问一个赚钱想法。","写一个小计划。","学习 5 个有用词语。","分享一个有用想法。","为未来迈出一步。"]}
+const commonOps={
+en:["Find one small earning opportunity close to your daily life.","Offer one simple help service to people around you.","Improve your resume/profile in 10 minutes.","Find one problem in your area and think how to solve it.","Learn one useful skill that can bring money later."],
+ru:["Найдите одну маленькую возможность заработать рядом с вашей обычной жизнью.","Предложите людям вокруг одну простую полезную услугу.","Улучшите резюме или профиль за 10 минут.","Найдите одну проблему рядом и подумайте, как её решить.","Выучите один полезный навык, который позже может приносить деньги."],
+de:["Finde eine kleine Verdienstmöglichkeit in deinem Alltag.","Biete Menschen in deiner Nähe eine einfache Hilfe an.","Verbessere deinen Lebenslauf oder dein Profil in 10 Minuten.","Finde ein Problem in deiner Umgebung und überlege eine Lösung.","Lerne eine nützliche Fähigkeit, die später Geld bringen kann."]
 };
 
-function browserLang(){
-  const b=(navigator.language||"en-US").toLowerCase();
-  if(b.startsWith("ru"))return"ru-RU";
-  if(b.startsWith("de"))return"de-DE";
-  if(b.startsWith("uz"))return"uz-UZ";
-  if(b.startsWith("tg"))return"tg-TJ";
-  if(b.startsWith("uk"))return"uk-UA";
-  if(b.startsWith("pl"))return"pl-PL";
-  if(b.startsWith("tr"))return"tr-TR";
-  if(b.startsWith("fr"))return"fr-FR";
-  if(b.startsWith("es"))return"es-ES";
-  if(b.startsWith("it"))return"it-IT";
-  if(b.startsWith("pt"))return"pt-PT";
-  if(b.startsWith("ar"))return"ar-SA";
-  if(b.startsWith("hi"))return"hi-IN";
-  if(b.startsWith("zh"))return"zh-CN";
-  return"en-US";
-}
+const commonMis={
+en:["Ask AI for one realistic money idea.","Write a simple plan for one small step.","Learn 5 useful words or skills today.","Send one message that can open an opportunity.","Do one action your future self will thank you for."],
+ru:["Спросите AI одну реальную идею заработка.","Напишите простой план одного маленького шага.","Выучите сегодня 5 полезных слов или навыков.","Отправьте одно сообщение, которое может открыть возможность.","Сделайте одно действие, за которое будущее «вы» скажет спасибо."],
+de:["Frage AI nach einer realistischen Geldidee.","Schreibe einen einfachen Plan für einen kleinen Schritt.","Lerne heute 5 nützliche Wörter oder Fähigkeiten.","Sende eine Nachricht, die eine Chance öffnen kann.","Mach eine Aktion, für die dein zukünftiges Ich dankbar ist."]
+};
 
-function langCode(){return languageSelect.value==="auto"?browserLang():languageSelect.value}
-function t(){return L[langCode()]||L["en-US"]}
+const L={
+"en-US":{name:"English",sub:"Your daily AI companion for life, growth and opportunities",op:"🔥 Daily Opportunity",mi:"🎯 Today's Mission",xp:"Growth XP",st:"🔥 Streak",lv1:"Level 1 · Explorer",lv2:"Level 2 · Builder",lv3:"Level 3 · Hustler",limit:"Free mode · Premium / ads / login foundation prepared",new:"🔥 New Daily Idea",voice:"🎙 Voice",stop:"⏹ Stop",clear:"Clear",share:"Share",gen:"Generate Growth Plan",ph:"Speak or type your question...",wel:"Welcome to SylNex AI.\n\nAsk about money, work, ideas, language, documents, growth or your next step.",empty:"Tell me what you want to improve, earn, build or understand.",load:"AI is thinking and looking for fresh practical ideas...",err:"Connection error. Please try again.",mic:"Microphone error. Please try again.",nov:"Voice is not supported in this browser. Try Chrome.",copy:"Copied!",foot:"Small steps every day. Big changes over time.",ops:commonOps.en,mis:commonMis.en},
+"ru-RU":{name:"Russian",sub:"Твой ежедневный AI-помощник для жизни, роста и возможностей",op:"🔥 Возможность дня",mi:"🎯 Миссия дня",xp:"Рост XP",st:"🔥 Серия",lv1:"Уровень 1 · Исследователь",lv2:"Уровень 2 · Создатель",lv3:"Уровень 3 · Добытчик",limit:"Бесплатный режим · основа Premium / рекламы / входа подготовлена",new:"🔥 Новая идея дня",voice:"🎙 Голос",stop:"⏹ Стоп",clear:"Очистить",share:"Поделиться",gen:"Создать план роста",ph:"Скажите или напишите вопрос...",wel:"Добро пожаловать в SylNex AI.\n\nСпросите про деньги, работу, идеи, язык, документы, рост или следующий шаг.",empty:"Напишите, что вы хотите улучшить, заработать, построить или понять.",load:"AI думает и ищет свежие практичные идеи...",err:"Ошибка соединения. Попробуйте ещё раз.",mic:"Ошибка микрофона. Попробуйте ещё раз.",nov:"Голос не поддерживается. Попробуйте Chrome.",copy:"Скопировано!",foot:"Маленькие шаги каждый день. Большие изменения со временем.",ops:commonOps.ru,mis:commonMis.ru},
+"de-DE":{name:"German",sub:"Dein täglicher AI-Begleiter für Leben, Wachstum und Chancen",op:"🔥 Chance des Tages",mi:"🎯 Mission des Tages",xp:"Wachstum XP",st:"🔥 Serie",lv1:"Level 1 · Entdecker",lv2:"Level 2 · Macher",lv3:"Level 3 · Hustler",limit:"Kostenloser Modus · Premium / Werbung / Login vorbereitet",new:"🔥 Neue Tagesidee",voice:"🎙 Sprache",stop:"⏹ Stopp",clear:"Löschen",share:"Teilen",gen:"Wachstumsplan erstellen",ph:"Sprich oder schreibe deine Frage...",wel:"Willkommen bei SylNex AI.\n\nFrage nach Geld, Arbeit, Ideen, Sprache, Dokumenten, Wachstum oder deinem nächsten Schritt.",empty:"Sag, was du verbessern, verdienen, aufbauen oder verstehen möchtest.",load:"AI denkt nach und sucht praktische frische Ideen...",err:"Verbindungsfehler. Bitte erneut versuchen.",mic:"Mikrofonfehler. Bitte erneut versuchen.",nov:"Sprache wird nicht unterstützt. Versuche Chrome.",copy:"Kopiert!",foot:"Kleine Schritte jeden Tag. Große Veränderungen mit der Zeit.",ops:commonOps.de,mis:commonMis.de},
+"uz-UZ":{name:"Uzbek",sub:"Hayot, rivoj va imkoniyatlar uchun kundalik AI yordamchi",op:"🔥 Kunning imkoniyati",mi:"🎯 Kunning vazifasi",xp:"Rivoj XP",st:"🔥 Ketma-ketlik",lv1:"1-daraja · Izlanuvchi",lv2:"2-daraja · Yaratuvchi",lv3:"3-daraja · Harakatchan",limit:"Bepul rejim · Premium / reklama / kirish asosi tayyor",new:"🔥 Yangi kunlik g‘oya",voice:"🎙 Ovoz",stop:"⏹ To‘xtatish",clear:"Tozalash",share:"Ulashish",gen:"Rivojlanish rejasini yaratish",ph:"Savolingizni ayting yoki yozing...",wel:"SylNex AI ga xush kelibsiz.\n\nPul, ish, g‘oyalar, til, hujjatlar, rivojlanish yoki keyingi qadam haqida so‘rang.",empty:"Nimani yaxshilash, topish, qurish yoki tushunishni xohlaysiz?",load:"AI siz uchun yangi amaliy g‘oyalarni qidirmoqda...",err:"Ulanishda xatolik. Qayta urinib ko‘ring.",mic:"Mikrofon xatosi. Qayta urinib ko‘ring.",nov:"Ovoz bu brauzerda ishlamaydi. Chrome ni sinab ko‘ring.",copy:"Nusxalandi!",foot:"Har kuni kichik qadamlar. Vaqt o‘tib katta o‘zgarishlar.",ops:["Bugun hayotingizga yaqin kichik daromad imkoniyatini toping.","Atrofingizdagi odamlarga oddiy yordam xizmatini taklif qiling.","Rezyume yoki profilingizni 10 daqiqada yaxshilang.","Yaqiningizdagi bir muammoni toping va yechim o‘ylang.","Keyin pul olib kelishi mumkin bo‘lgan foydali ko‘nikma o‘rganing."],mis:["AI dan bitta real daromad g‘oyasini so‘rang.","Bitta kichik qadam uchun oddiy reja yozing.","Bugun 5 ta foydali so‘z yoki ko‘nikma o‘rganing.","Imkoniyat ochishi mumkin bo‘lgan bitta xabar yuboring.","Kelajagingiz uchun bitta foydali ish qiling."]},
+"tg-TJ":{name:"Tajik",sub:"Ёрдамчии ҳаррӯзаи AI барои зиндагӣ, рушд ва имкониятҳо",op:"🔥 Имконияти рӯз",mi:"🎯 Вазифаи рӯз",xp:"Рушд XP",st:"🔥 Пайдарпайӣ",lv1:"Сатҳ 1 · Ҷустуҷӯгар",lv2:"Сатҳ 2 · Созанда",lv3:"Сатҳ 3 · Фаъол",limit:"Реҷаи ройгон · асоси Premium / реклама / воридшавӣ омода аст",new:"🔥 Идеяи нави рӯз",voice:"🎙 Овоз",stop:"⏹ Ист",clear:"Тоза кардан",share:"Мубодила",gen:"Сохтани нақшаи рушд",ph:"Саволро гӯед ё нависед...",wel:"Хуш омадед ба SylNex AI.\n\nДар бораи пул, кор, идеяҳо, забон, ҳуҷҷатҳо, рушд ё қадами оянда пурсед.",empty:"Нависед, чӣ мехоҳед беҳтар кунед, ба даст оред, созед ё фаҳмед.",load:"AI барои шумо идеяҳои нави амалӣ меҷӯяд...",err:"Хатои пайвастшавӣ. Бори дигар кӯшиш кунед.",mic:"Хатои микрофон. Бори дигар кӯшиш кунед.",nov:"Овоз дар ин браузер дастгирӣ намешавад. Chrome-ро санҷед.",copy:"Нусха шуд!",foot:"Ҳар рӯз қадамҳои хурд. Бо вақт тағйироти калон.",ops:["Имрӯз як имконияти хурди даромадро дар зиндагии ҳаррӯза пайдо кунед.","Ба одамони атроф як хизмати оддии кӯмак пешниҳод кунед.","Резюме ё профили худро дар 10 дақиқа беҳтар кунед.","Як мушкили наздикро пайдо кунед ва роҳи ҳал фикр кунед.","Як малакаи муфид омӯзед, ки баъдтар пул оварда метавонад."],mis:["Аз AI як идеяи воқеии даромад пурсед.","Барои як қадами хурд нақшаи содда нависед.","Имрӯз 5 калима ё малакаи муфид омӯзед.","Як паём фиристед, ки метавонад имконият кушояд.","Як кор кунед, ки ояндаи шумо миннатдор мешавад."]},
+"uk-UA":{name:"Ukrainian",sub:"Твій щоденний AI-помічник для життя, росту і можливостей",op:"🔥 Можливість дня",mi:"🎯 Місія дня",xp:"Ріст XP",st:"🔥 Серія",lv1:"Рівень 1 · Дослідник",lv2:"Рівень 2 · Творець",lv3:"Рівень 3 · Хастлер",limit:"Безкоштовний режим · основа Premium / реклами / входу підготовлена",new:"🔥 Нова ідея дня",voice:"🎙 Голос",stop:"⏹ Стоп",clear:"Очистити",share:"Поділитися",gen:"Створити план росту",ph:"Скажіть або напишіть питання...",wel:"Ласкаво просимо до SylNex AI.\n\nЗапитайте про гроші, роботу, ідеї, мову, документи, розвиток або наступний крок.",empty:"Напишіть, що хочете покращити, заробити, створити або зрозуміти.",load:"AI шукає для вас свіжі практичні ідеї...",err:"Помилка з’єднання. Спробуйте ще раз.",mic:"Помилка мікрофона. Спробуйте ще раз.",nov:"Голос не підтримується. Спробуйте Chrome.",copy:"Скопійовано!",foot:"Малі кроки щодня. Великі зміни з часом.",ops:["Знайдіть сьогодні одну малу можливість заробітку поруч із вашим життям.","Запропонуйте людям навколо просту корисну послугу.","Покращіть резюме або профіль за 10 хвилин.","Знайдіть одну проблему поруч і подумайте, як її вирішити.","Вивчіть корисну навичку, яка згодом може приносити гроші."],mis:["Запитайте AI одну реальну ідею заробітку.","Напишіть простий план одного маленького кроку.","Вивчіть сьогодні 5 корисних слів або навичок.","Надішліть одне повідомлення, яке може відкрити можливість.","Зробіть одну дію для майбутнього."]},
+"pl-PL":{name:"Polish",sub:"Twój codzienny AI pomocnik do życia, rozwoju i szans",op:"🔥 Szansa dnia",mi:"🎯 Misja dnia",xp:"Rozwój XP",st:"🔥 Seria",lv1:"Poziom 1 · Odkrywca",lv2:"Poziom 2 · Twórca",lv3:"Poziom 3 · Hustler",limit:"Tryb darmowy · podstawa Premium / reklam / logowania gotowa",new:"🔥 Nowy pomysł dnia",voice:"🎙 Głos",stop:"⏹ Stop",clear:"Wyczyść",share:"Udostępnij",gen:"Stwórz plan rozwoju",ph:"Powiedz lub wpisz pytanie...",wel:"Witamy w SylNex AI.\n\nZapytaj o pieniądze, pracę, pomysły, język, dokumenty, rozwój lub następny krok.",empty:"Napisz, co chcesz poprawić, zarobić, zbudować lub zrozumieć.",load:"AI szuka świeżych praktycznych pomysłów...",err:"Błąd połączenia. Spróbuj ponownie.",mic:"Błąd mikrofonu. Spróbuj ponownie.",nov:"Głos nie jest obsługiwany. Spróbuj Chrome.",copy:"Skopiowano!",foot:"Małe kroki każdego dnia. Wielkie zmiany z czasem.",ops:commonOps.en,mis:commonMis.en},
+"tr-TR":{name:"Turkish",sub:"Hayat, gelişim ve fırsatlar için günlük AI yardımcın",op:"🔥 Günün fırsatı",mi:"🎯 Günün görevi",xp:"Gelişim XP",st:"🔥 Seri",lv1:"Seviye 1 · Kaşif",lv2:"Seviye 2 · Üretici",lv3:"Seviye 3 · Hustler",limit:"Ücretsiz mod · Premium / reklam / giriş temeli hazır",new:"🔥 Yeni günlük fikir",voice:"🎙 Ses",stop:"⏹ Durdur",clear:"Temizle",share:"Paylaş",gen:"Gelişim planı oluştur",ph:"Sorunu söyle veya yaz...",wel:"SylNex AI’ye hoş geldin.\n\nPara, iş, fikir, dil, belge, gelişim veya sonraki adım hakkında sor.",empty:"Neyi geliştirmek, kazanmak, kurmak veya anlamak istiyorsun?",load:"AI senin için yeni pratik fikirler arıyor...",err:"Bağlantı hatası. Tekrar dene.",mic:"Mikrofon hatası. Tekrar dene.",nov:"Ses bu tarayıcıda desteklenmiyor. Chrome dene.",copy:"Kopyalandı!",foot:"Her gün küçük adımlar. Zamanla büyük değişimler.",ops:commonOps.en,mis:commonMis.en},
+"fr-FR":{name:"French",sub:"Ton compagnon AI quotidien pour la vie, la croissance et les opportunités",op:"🔥 Opportunité du jour",mi:"🎯 Mission du jour",xp:"Croissance XP",st:"🔥 Série",lv1:"Niveau 1 · Explorateur",lv2:"Niveau 2 · Créateur",lv3:"Niveau 3 · Hustler",limit:"Mode gratuit · base Premium / pubs / connexion préparée",new:"🔥 Nouvelle idée du jour",voice:"🎙 Voix",stop:"⏹ Stop",clear:"Effacer",share:"Partager",gen:"Créer un plan de croissance",ph:"Parle ou écris ta question...",wel:"Bienvenue sur SylNex AI.\n\nPose une question sur l’argent, le travail, les idées, la langue, les documents ou ta prochaine étape.",empty:"Dis ce que tu veux améliorer, gagner, construire ou comprendre.",load:"AI cherche des idées fraîches et pratiques...",err:"Erreur de connexion. Réessaie.",mic:"Erreur de microphone. Réessaie.",nov:"La voix n’est pas prise en charge. Essaie Chrome.",copy:"Copié!",foot:"Petits pas chaque jour. Grands changements avec le temps.",ops:commonOps.en,mis:commonMis.en},
+"es-ES":{name:"Spanish",sub:"Tu compañero diario de AI para vida, crecimiento y oportunidades",op:"🔥 Oportunidad del día",mi:"🎯 Misión del día",xp:"Crecimiento XP",st:"🔥 Racha",lv1:"Nivel 1 · Explorador",lv2:"Nivel 2 · Creador",lv3:"Nivel 3 · Hustler",limit:"Modo gratis · base de Premium / anuncios / login preparada",new:"🔥 Nueva idea del día",voice:"🎙 Voz",stop:"⏹ Parar",clear:"Limpiar",share:"Compartir",gen:"Crear plan de crecimiento",ph:"Habla o escribe tu pregunta...",wel:"Bienvenido a SylNex AI.\n\nPregunta sobre dinero, trabajo, ideas, idioma, documentos, crecimiento o tu próximo paso.",empty:"Escribe qué quieres mejorar, ganar, construir o entender.",load:"AI está buscando ideas nuevas y prácticas...",err:"Error de conexión. Inténtalo otra vez.",mic:"Error de micrófono. Inténtalo otra vez.",nov:"La voz no es compatible. Prueba Chrome.",copy:"Copiado!",foot:"Pequeños pasos cada día. Grandes cambios con el tiempo.",ops:commonOps.en,mis:commonMis.en},
+"it-IT":{name:"Italian",sub:"Il tuo compagno AI quotidiano per vita, crescita e opportunità",op:"🔥 Opportunità del giorno",mi:"🎯 Missione del giorno",xp:"Crescita XP",st:"🔥 Serie",lv1:"Livello 1 · Esploratore",lv2:"Livello 2 · Creatore",lv3:"Livello 3 · Hustler",limit:"Modalità gratuita · base Premium / pubblicità / login pronta",new:"🔥 Nuova idea del giorno",voice:"🎙 Voce",stop:"⏹ Stop",clear:"Cancella",share:"Condividi",gen:"Crea piano di crescita",ph:"Parla o scrivi la tua domanda...",wel:"Benvenuto in SylNex AI.\n\nChiedi di soldi, lavoro, idee, lingua, documenti, crescita o prossimo passo.",empty:"Scrivi cosa vuoi migliorare, guadagnare, costruire o capire.",load:"AI cerca idee nuove e pratiche...",err:"Errore di connessione. Riprova.",mic:"Errore microfono. Riprova.",nov:"Voce non supportata. Prova Chrome.",copy:"Copiato!",foot:"Piccoli passi ogni giorno. Grandi cambiamenti nel tempo.",ops:commonOps.en,mis:commonMis.en},
+"pt-PT":{name:"Portuguese",sub:"O teu companheiro diário de AI para vida, crescimento e oportunidades",op:"🔥 Oportunidade do dia",mi:"🎯 Missão do dia",xp:"Crescimento XP",st:"🔥 Série",lv1:"Nível 1 · Explorador",lv2:"Nível 2 · Criador",lv3:"Nível 3 · Hustler",limit:"Modo gratuito · base Premium / anúncios / login preparada",new:"🔥 Nova ideia do dia",voice:"🎙 Voz",stop:"⏹ Parar",clear:"Limpar",share:"Partilhar",gen:"Criar plano de crescimento",ph:"Fala ou escreve a tua pergunta...",wel:"Bem-vindo ao SylNex AI.\n\nPergunta sobre dinheiro, trabalho, ideias, idioma, documentos, crescimento ou próximo passo.",empty:"Escreve o que queres melhorar, ganhar, construir ou entender.",load:"AI está a procurar ideias novas e práticas...",err:"Erro de ligação. Tenta novamente.",mic:"Erro de microfone. Tenta novamente.",nov:"Voz não suportada. Tenta Chrome.",copy:"Copiado!",foot:"Pequenos passos todos os dias. Grandes mudanças com o tempo.",ops:commonOps.en,mis:commonMis.en},
+"ar-SA":{name:"Arabic",sub:"رفيقك اليومي بالذكاء الاصطناعي للحياة والنمو والفرص",op:"🔥 فرصة اليوم",mi:"🎯 مهمة اليوم",xp:"نقاط النمو",st:"🔥 السلسلة",lv1:"المستوى 1 · مستكشف",lv2:"المستوى 2 · صانع",lv3:"المستوى 3 · نشيط",limit:"الوضع المجاني · أساس Premium / الإعلانات / الدخول جاهز",new:"🔥 فكرة يومية جديدة",voice:"🎙 صوت",stop:"⏹ توقف",clear:"مسح",share:"مشاركة",gen:"إنشاء خطة نمو",ph:"قل أو اكتب سؤالك...",wel:"مرحباً بك في SylNex AI.\n\nاسأل عن المال، العمل، الأفكار، اللغة، الوثائق، النمو أو خطوتك التالية.",empty:"اكتب ما تريد تحسينه أو كسبه أو بناؤه أو فهمه.",load:"AI يبحث لك عن أفكار عملية جديدة...",err:"خطأ في الاتصال. حاول مرة أخرى.",mic:"خطأ في الميكروفون. حاول مرة أخرى.",nov:"الصوت غير مدعوم. جرّب Chrome.",copy:"تم النسخ!",foot:"خطوات صغيرة كل يوم. تغييرات كبيرة مع الوقت.",ops:commonOps.en,mis:commonMis.en},
+"hi-IN":{name:"Hindi",sub:"जीवन, विकास और अवसरों के लिए आपका दैनिक AI साथी",op:"🔥 आज का अवसर",mi:"🎯 आज का मिशन",xp:"Growth XP",st:"🔥 Streak",lv1:"Level 1 · Explorer",lv2:"Level 2 · Builder",lv3:"Level 3 · Hustler",limit:"Free mode · Premium / ads / login base prepared",new:"🔥 नई दैनिक आइडिया",voice:"🎙 आवाज़",stop:"⏹ रोकें",clear:"साफ करें",share:"शेयर",gen:"Growth Plan बनाएं",ph:"अपना सवाल बोलें या लिखें...",wel:"SylNex AI में आपका स्वागत है.\n\nपैसा, काम, आइडिया, भाषा, दस्तावेज़, विकास या अगले कदम के बारे में पूछें.",empty:"लिखें कि आप क्या सुधारना, कमाना, बनाना या समझना चाहते हैं.",load:"AI आपके लिए नए व्यावहारिक आइडिया खोज रहा है...",err:"कनेक्शन त्रुटि. फिर कोशिश करें.",mic:"माइक्रोफोन त्रुटि. फिर कोशिश करें.",nov:"Voice समर्थित नहीं है. Chrome आज़माएं.",copy:"कॉपी हो गया!",foot:"हर दिन छोटे कदम. समय के साथ बड़े बदलाव.",ops:commonOps.en,mis:commonMis.en},
+"zh-CN":{name:"Chinese",sub:"你的每日 AI 生活、成长与机会伙伴",op:"🔥 今日机会",mi:"🎯 今日任务",xp:"成长 XP",st:"🔥 连续天数",lv1:"等级 1 · 探索者",lv2:"等级 2 · 建造者",lv3:"等级 3 · 行动者",limit:"免费模式 · Premium / 广告 / 登录基础已准备",new:"🔥 新的每日想法",voice:"🎙 语音",stop:"⏹ 停止",clear:"清除",share:"分享",gen:"生成成长计划",ph:"说出或输入你的问题...",wel:"欢迎使用 SylNex AI。\n\n询问赚钱、工作、想法、语言、文件、成长或下一步。",empty:"写下你想改进、赚钱、建立或理解什么。",load:"AI 正在为你寻找新的实用想法...",err:"连接错误。请重试。",mic:"麦克风错误。请重试。",nov:"此浏览器不支持语音。请尝试 Chrome。",copy:"已复制!",foot:"每天小步骤，长期大改变。",ops:commonOps.en,mis:commonMis.en}
+};
+
+const extraFallback={
+"fa-IR":{name:"Persian",base:"ar-SA"},
+"kk-KZ":{name:"Kazakh",base:"ru-RU"},
+"ky-KG":{name:"Kyrgyz",base:"ru-RU"},
+"az-AZ":{name:"Azerbaijani",base:"tr-TR"},
+"ro-RO":{name:"Romanian",base:"en-US"},
+"bg-BG":{name:"Bulgarian",base:"ru-RU"}
+};
+
+function langCode(){return languageSelect.value==="auto"?"en-US":languageSelect.value}
+function t(){
+  const code=langCode();
+  if(L[code]) return L[code];
+  if(extraFallback[code]){
+    const base=L[extraFallback[code].base]||L["en-US"];
+    return {...base,name:extraFallback[code].name};
+  }
+  return L["en-US"];
+}
 
 let xp=Number(localStorage.getItem("sylnexXP"))||0;
 let streak=Number(localStorage.getItem("sylnexStreak"))||1;
@@ -171,47 +161,23 @@ function updateStats(){
  streakBox.innerText=a.st+": "+streak;
  levelBox.innerText=xp>=50?a.lv3:xp>=20?a.lv2:a.lv1;
 }
-
 function randomDaily(){
  const a=t();
  opportunityText.innerText=a.ops[Math.floor(Math.random()*a.ops.length)];
  missionText.innerText=a.mis[Math.floor(Math.random()*a.mis.length)];
 }
-
 function updateUI(){
  const a=t();
- subtitle.innerText=a.sub;
- opportunityTitle.innerText=a.op;
- missionTitle.innerText=a.mi;
- dailyIdeaBtn.innerText=a.new;
- voiceBtn.innerText=a.voice;
- clearBtn.innerText=a.clear;
- shareBtn.innerText=a.share;
- generateBtn.innerText=a.gen;
- userInput.placeholder=a.ph;
- footerNote.innerText=a.foot;
- result.innerText=a.wel;
- updateStats();
- randomDaily();
+ subtitle.innerText=a.sub;opportunityTitle.innerText=a.op;missionTitle.innerText=a.mi;limitNote.innerText=a.limit;
+ dailyIdeaBtn.innerText=a.new;voiceBtn.innerText=a.voice;clearBtn.innerText=a.clear;shareBtn.innerText=a.share;generateBtn.innerText=a.gen;
+ userInput.placeholder=a.ph;footerNote.innerText=a.foot;result.innerText=a.wel;updateStats();randomDaily();
 }
-
-const savedLang=localStorage.getItem("sylnexLanguage");
-if(savedLang)languageSelect.value=savedLang;
-updateUI();
-
+const savedLang=localStorage.getItem("sylnexLanguage");if(savedLang)languageSelect.value=savedLang;updateUI();
 languageSelect.addEventListener("change",()=>{localStorage.setItem("sylnexLanguage",languageSelect.value);updateUI()});
-
 function addXP(p){xp+=p;localStorage.setItem("sylnexXP",xp);updateStats()}
-
 dailyIdeaBtn.onclick=()=>{randomDaily();addXP(3)};
 clearBtn.onclick=()=>{userInput.value="";result.innerText=t().wel;addXP(1)};
-
-shareBtn.onclick=async()=>{
- try{
-  if(navigator.share){await navigator.share({title:"SylNex AI",text:result.innerText})}
-  else{await navigator.clipboard.writeText(result.innerText);shareBtn.innerText=t().copy;setTimeout(()=>shareBtn.innerText=t().share,1500)}
- }catch(e){}
-};
+shareBtn.onclick=async()=>{try{if(navigator.share){await navigator.share({title:"SylNex AI",text:result.innerText})}else{await navigator.clipboard.writeText(result.innerText);shareBtn.innerText=t().copy;setTimeout(()=>shareBtn.innerText=t().share,1500)}}catch(e){}};
 
 generateBtn.onclick=async()=>{
  const text=userInput.value.trim();
@@ -225,52 +191,27 @@ generateBtn.onclick=async()=>{
  }catch(e){result.innerText=t().err}
 };
 
-let recognition=null;
-let listening=false;
-let finalText="";
-
+let recognition=null,listening=false,finalText="";
 if("webkitSpeechRecognition" in window){
  recognition=new webkitSpeechRecognition();
- recognition.continuous=true;
- recognition.interimResults=true;
-
+ recognition.continuous=true;recognition.interimResults=true;
  voiceBtn.onclick=()=>{
-  if(listening){
-   recognition.stop();
-   listening=false;
-   voiceBtn.innerText=t().voice;
-   return;
-  }
+  if(listening){recognition.stop();listening=false;voiceBtn.innerText=t().voice;return}
   finalText=userInput.value?userInput.value+" ":"";
   recognition.lang=langCode();
-  listening=true;
-  voiceBtn.innerText=t().stop;
-  recognition.start();
+  listening=true;voiceBtn.innerText=t().stop;recognition.start();
  };
-
  recognition.onresult=(event)=>{
   let interim="";
   for(let i=event.resultIndex;i<event.results.length;i++){
    const transcript=event.results[i][0].transcript;
-   if(event.results[i].isFinal){finalText+=transcript+" "}
-   else{interim+=transcript}
+   if(event.results[i].isFinal){finalText+=transcript+" "}else{interim+=transcript}
   }
   userInput.value=(finalText+interim).trim();
  };
-
- recognition.onerror=()=>{
-  listening=false;
-  voiceBtn.innerText=t().voice;
-  result.innerText=t().mic;
- };
-
- recognition.onend=()=>{
-  listening=false;
-  voiceBtn.innerText=t().voice;
- };
-}else{
- voiceBtn.onclick=()=>result.innerText=t().nov;
-}
+ recognition.onerror=()=>{listening=false;voiceBtn.innerText=t().voice;result.innerText=t().mic};
+ recognition.onend=()=>{listening=false;voiceBtn.innerText=t().voice};
+}else{voiceBtn.onclick=()=>result.innerText=t().nov}
 </script>
 </body>
 </html>
