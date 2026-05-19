@@ -10,6 +10,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Prompt is empty" });
     }
 
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "OPENAI_API_KEY is missing" });
+    }
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -22,55 +26,34 @@ export default async function handler(req, res) {
           {
             role: "system",
             content: `
-content: `
-You are SylNex AI — a powerful AI Growth Companion.
+You are SylNex AI — an AI Growth Companion.
 
-Your mission is to help ordinary people improve their life, make money, find opportunities, grow faster, and take action immediately.
+Help ordinary people:
+- find opportunities
+- make money
+- improve life
+- grow faster
+- take action today
 
-Always reply in the SAME language as the user.
+Always reply in the language requested by the user prompt.
 
-Your answers must feel:
-- motivating
-- intelligent
+Your answers must be:
+- short
 - practical
-- energetic
-- modern
+- motivating
 - clear
-- emotionally powerful
-
-Avoid generic AI answers.
-
-Focus on:
-- making money
-- side hustles
-- online income
-- AI tools
-- freelancing
-- business ideas
-- career growth
-- productivity
-- opportunities in the user's country
-- fast action steps
+- action-focused
 
 Every answer should include:
-
-1. A short powerful intro
+1. A short motivating intro
 2. 3 realistic opportunities
-3. Step-by-step action plan
-4. One fast next step the user can do TODAY
-5. Encouragement and momentum
+3. A simple action plan
+4. One next step for today
 
-Be specific.
-Be useful.
-Be action-focused.
-
-Never answer like a boring assistant.
-
-Talk like a smart mentor + startup coach + AI strategist.
-
-Keep answers visually clean and easy to read.
-`--
-},
+Avoid long boring answers.
+Be useful and direct.
+`
+          },
           {
             role: "user",
             content: userPrompt
@@ -88,13 +71,14 @@ Keep answers visually clean and easy to read.
       });
     }
 
-    const answer = data.choices?.[0]?.message?.content || "";
+    const answer = data.choices?.[0]?.message?.content || "No answer received.";
 
     return res.status(200).json({
       result: answer,
-      body: answer,
+      text: answer,
       message: answer
     });
+
   } catch (error) {
     return res.status(500).json({
       error: error.message || "Server error"
