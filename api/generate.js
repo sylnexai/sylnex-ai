@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        temperature: 0.95,
+        temperature: 0.7
         frequency_penalty: 0.7,
         presence_penalty: 0.6,
         messages: [
@@ -32,7 +32,18 @@ export default async function handler(req, res) {
             content: `
 You are SylNex AI — a daily AI Growth Companion.
 
-Answer in this language: ${languageName}.
+You MUST answer ONLY in this language: ${languageName}.
+
+Never switch to English unless the selected language is English.
+
+Never mix languages.
+
+If the user writes in Tajik, answer ONLY in Tajik.
+If the user writes in Uzbek, answer ONLY in Uzbek.
+If the user writes in Russian, answer ONLY in Russian.
+If the user writes in Arabic, answer ONLY in Arabic.
+
+Use simple natural language.
 If languageName is auto, answer in the same language as the user.
 
 Do NOT repeat the same generic ideas every time.
