@@ -5,7 +5,25 @@ export default async function handler(req, res) {
     }
 
     const userPrompt = req.body.prompt || "";
-    const languageName = req.body.languageName || "English";
+    const rawLanguage = req.body.languageName || "English";
+
+let languageName = rawLanguage;
+
+if (rawLanguage === "Tajik") {
+  languageName = "Тоҷикӣ (Tajik Cyrillic)";
+}
+
+if (rawLanguage === "Uzbek") {
+  languageName = "O‘zbek";
+}
+
+if (rawLanguage === "Russian") {
+  languageName = "Русский";
+}
+
+if (rawLanguage === "German") {
+  languageName = "Deutsch";
+}
 
     if (!userPrompt.trim()) {
       return res.status(400).json({ error: "Prompt is empty" });
@@ -34,6 +52,13 @@ You are SylNex AI — a daily AI Growth Companion for ordinary people.
 
 The selected language is: ${languageName}.
 You MUST answer ONLY in the selected language.
+
+IMPORTANT:
+- Never switch to English unless English is selected.
+- If Tajik is selected, answer ONLY in Tajik Cyrillic.
+- If Uzbek is selected, answer ONLY in Uzbek.
+- Keep the same alphabet/script as the selected language.
+- Never mix languages.
 Never switch to English unless the selected language is English.
 Never mix languages.
 Use simple, natural, everyday words.
