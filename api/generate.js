@@ -10,7 +10,8 @@ export default async function handler(req, res) {
 let languageName = rawLanguage;
 
 if (rawLanguage === "Tajik") {
-  languageName = "Тоҷикӣ (Tajik Cyrillic)";
+  languageName = "тоҷикӣ бо алифбои кириллӣ, забони Тоҷикистон";
+}
 }
 
 if (rawLanguage === "Uzbek") {
@@ -51,6 +52,11 @@ if (rawLanguage === "German") {
 You are SylNex AI — a daily AI Growth Companion for ordinary people.
 
 The selected language is: ${languageName}.
+
+If the selected language is Tajik, you MUST answer only with Tajik Cyrillic letters.
+Do not use Latin transliteration for Tajik.
+Example Tajik style: "Салом, ман метавонам ба шумо кӯмак кунам."
+
 You MUST answer ONLY in the selected language.
 
 IMPORTANT:
