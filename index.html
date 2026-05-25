@@ -487,7 +487,75 @@ $("result").innerText=a.error;
 }
 
 };
+let recognition=null;
+let listening=false;
+let finalText="";
 
+if("webkitSpeechRecognition" in window){
+
+recognition=new webkitSpeechRecognition();
+recognition.continuous=true;
+recognition.interimResults=true;
+
+$("voiceBtn").onclick=()=>{
+
+const a=current();
+
+if(listening){
+recognition.stop();
+listening=false;
+$("voiceBtn").classList.remove("pulse");
+$("voiceLabel").innerText=a.voiceLabel;
+return;
+}
+
+finalText=$("userInput").value ? $("userInput").value+" " : "";
+recognition.lang=$("languageSelect").value;
+listening=true;
+$("voiceBtn").classList.add("pulse");
+$("voiceLabel").innerText=a.listening;
+recognition.start();
+
+};
+
+recognition.onresult=(event)=>{
+
+let interim="";
+
+for(let i=event.resultIndex;i<event.results.length;i++){
+const txt=event.results[i][0].transcript;
+
+if(event.results[i].isFinal){
+finalText += txt + " ";
+}else{
+interim += txt;
+}
+}
+
+$("userInput").value=(finalText+interim).trim();
+
+};
+
+recognition.onerror=()=>{
+listening=false;
+$("voiceBtn").classList.remove("pulse");
+$("voiceLabel").innerText=current().voiceLabel;
+$("result").innerText=current().micError;
+};
+
+recognition.onend=()=>{
+listening=false;
+$("voiceBtn").classList.remove("pulse");
+$("voiceLabel").innerText=current().voiceLabel;
+};
+
+}else{
+
+$("voiceBtn").onclick=()=>{
+$("result").innerText=current().noVoice;
+};
+
+}
 applyLang();
 </script>
 
