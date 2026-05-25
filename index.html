@@ -126,12 +126,15 @@ button:active{transform:scale(.97)}
     </div>
 
     <div class="result" id="result"></div>
+    <div class="historyBox" id="historyBox"></div>
     <div class="footer" id="footer"></div>
   </div>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
+
+  let historyData = JSON.parse(localStorage.getItem("sylnex_history") || "[]");
 
 const UI = {
  "en-US":{
@@ -363,6 +366,27 @@ $("generateBtn").onclick=async()=>{
    if(!r.ok) throw new Error("api");
    const d=await r.json();
    $("result").innerText=d.text || d.result || d.message || a.localAnswer(prompt);
+   historyData.unshift({
+prompt,
+answer:data.text || data.result || data.message
+});
+
+localStorage.setItem(
+"sylnex_history",
+JSON.stringify(historyData.slice(0,20))
+);
+
+$("historyBox").innerHTML =
+historyData
+.slice(0,5)
+.map(item=>`
+<div style="margin-top:12px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.05)">
+<div style="font-size:12px;opacity:.6">You asked:</div>
+<div>${item.prompt}</div>
+<div style="margin-top:8px;font-size:12px;opacity:.6">SylNex:</div>
+<div>${item.answer}</div>
+</div>
+`).join("");
  }catch(e){
    $("result").innerText=a.error + a.localAnswer(prompt);
  }
