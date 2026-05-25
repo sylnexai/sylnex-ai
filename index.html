@@ -357,8 +357,15 @@ $("generateBtn").onclick=async()=>{
  const prompt=$("userInput").value.trim();
  if(!prompt){ $("result").innerText=a.empty; return; }
  $("result").innerText=a.loading;
- try{
-   const r=await fetch("/api/generate",{
+ try{const controller = new AbortController();
+setTimeout(() => controller.abort(), 25000);
+
+const r = await fetch("/api/generate", {
+  method: "POST",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify({prompt, languageName:a.name}),
+  signal: controller.signal
+});
      method:"POST",
      headers:{"Content-Type":"application/json"},
      body:JSON.stringify({prompt,languageName:a.name})
