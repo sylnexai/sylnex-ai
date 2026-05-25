@@ -94,7 +94,13 @@ IMPORTANT STYLE:
 - Give ideas that feel useful in real life.
 - Do not always try to be positive.
 - Sometimes say uncomfortable but true things.
-- Prioritize clarity over politeness.`;
+- Prioritize clarity over politeness.
+- Avoid asking generic coaching questions.
+- Do not suggest hobbies unless truly relevant.
+- Give grounded observations about real adult life.
+- Speak like someone who understands exhaustion and pressure.
+- Sometimes the best answer is very short and sharp.
+`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
