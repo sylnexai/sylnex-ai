@@ -195,3 +195,301 @@ margin-bottom:12px;
 textarea::placeholder{
 color:#aeb9e8
 }
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:12px
+}
+
+button{
+border:none;
+border-radius:18px;
+padding:15px;
+font-weight:950;
+font-size:15px;
+color:white;
+cursor:pointer;
+background:rgba(255,255,255,.16);
+}
+
+.primary{
+grid-column:span 2;
+
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--blue)
+);
+
+box-shadow:0 14px 32px rgba(0,210,255,.23);
+}
+
+.result{
+min-height:180px;
+max-height:360px;
+overflow-y:auto;
+white-space:pre-wrap;
+
+background:rgba(0,0,0,.32);
+
+border:1px solid rgba(255,255,255,.10);
+border-radius:26px;
+padding:18px;
+line-height:1.6;
+color:#eef3ff;
+font-size:15px;
+}
+
+.footer{
+text-align:center;
+margin-top:13px;
+color:#9eaae6;
+font-size:12px
+}
+
+.pulse{
+animation:pulse 1.2s infinite
+}
+
+@keyframes pulse{
+0%{
+box-shadow:0 0 34px rgba(255,0,204,.30)
+}
+
+50%{
+box-shadow:0 0 60px rgba(0,210,255,.42)
+}
+
+100%{
+box-shadow:0 0 34px rgba(255,0,204,.30)
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="content">
+
+<div class="header">
+
+<div class="logo">S</div>
+
+<h1>SylNex AI</h1>
+
+<div class="subtitle" id="subtitle"></div>
+
+</div>
+
+<select id="languageSelect">
+
+<option value="en-US">English</option>
+
+<option value="ru-RU">Русский</option>
+
+<option value="de-DE">Deutsch</option>
+
+<option value="uz-UZ">Oʻzbek</option>
+
+<option value="tg-TJ">Тоҷикӣ</option>
+
+<option value="tr-TR">Türkçe</option>
+
+<option value="pl-PL">Polski</option>
+
+<option value="fr-FR">Français</option>
+
+<option value="ar-SA">العربية</option>
+
+<option value="hi-IN">हिन्दी</option>
+
+<option value="zh-CN">中文</option>
+
+</select>
+
+<div class="daily">
+
+<div class="kicker" id="dailyTitle"></div>
+
+<div class="dailyText" id="dailyText"></div>
+
+</div>
+
+<div class="voiceWrap">
+
+<button class="voiceBtn" id="voiceBtn">🎙</button>
+
+<div class="voiceLabel" id="voiceLabel"></div>
+
+</div>
+
+<textarea id="userInput"></textarea>
+
+<div class="row">
+
+<button id="clearBtn"></button>
+
+<button id="newIdeaBtn"></button>
+
+<button class="primary" id="generateBtn"></button>
+
+</div>
+
+<div class="result" id="result"></div>
+
+<div class="footer" id="footer"></div>
+
+</div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+  const UI = {
+"en-US":{
+name:"English",
+subtitle:"Your AI Growth Companion for money ideas, skills and next steps.",
+dailyTitle:"Daily Opportunity",
+voiceLabel:"Tap to speak",
+listening:"Listening...",
+clear:"Clear",
+newIdea:"New idea",
+generate:"Generate plan",
+placeholder:"Ask about money, work, ideas, documents, language, or your next step...",
+welcome:"Welcome to SylNex AI.\n\nAsk me what you want to improve, earn, learn or build.",
+empty:"Write or say what you want to improve.",
+loading:"SylNex is creating a practical plan...",
+error:"Connection problem. Try again.",
+micError:"Microphone error. Please try again.",
+noVoice:"Voice is not supported in this browser.",
+footer:"One small step today can open a new opportunity tomorrow.",
+ideas:[
+"Find one simple service you can offer today.",
+"Improve one message, resume or profile using AI.",
+"Ask one person what problem they need solved.",
+"Turn one skill into a paid service.",
+"Learn one useful digital skill today."
+]
+},
+
+"ru-RU":{
+name:"Russian",
+subtitle:"Твой AI-компаньон для идей заработка, навыков и следующих шагов.",
+dailyTitle:"Возможность дня",
+voiceLabel:"Нажмите и говорите",
+listening:"Слушаю...",
+clear:"Очистить",
+newIdea:"Новая идея",
+generate:"Создать план",
+placeholder:"Спросите про деньги, работу, идеи, язык или следующий шаг...",
+welcome:"Добро пожаловать в SylNex AI.\n\nСкажи, что хочешь улучшить, заработать, выучить или построить.",
+empty:"Напишите или скажите, что хотите улучшить.",
+loading:"SylNex создаёт практичный план...",
+error:"Проблема соединения.",
+micError:"Ошибка микрофона.",
+noVoice:"Голос не поддерживается.",
+footer:"Один маленький шаг сегодня может открыть новую возможность завтра.",
+ideas:[
+"Найдите одну простую услугу рядом.",
+"Улучшите своё резюме или сообщение.",
+"Спросите человека рядом, какая помощь ему нужна.",
+"Превратите один навык в маленький доход.",
+"Учите полезный цифровой навык 20 минут."
+]
+}
+};
+
+function current(){
+return UI[$("languageSelect").value] || UI["en-US"];
+}
+
+function randomIdea(){
+const a=current();
+
+$("dailyText").innerText =
+a.ideas[Math.floor(Math.random()*a.ideas.length)];
+}
+
+function applyLang(){
+
+const a=current();
+
+$("subtitle").innerText=a.subtitle;
+$("dailyTitle").innerText=a.dailyTitle;
+$("voiceLabel").innerText=a.voiceLabel;
+$("clearBtn").innerText=a.clear;
+$("newIdeaBtn").innerText=a.newIdea;
+$("generateBtn").innerText=a.generate;
+$("userInput").placeholder=a.placeholder;
+$("result").innerText=a.welcome;
+$("footer").innerText=a.footer;
+
+randomIdea();
+}
+
+$("languageSelect").addEventListener("change",applyLang);
+
+$("newIdeaBtn").onclick=randomIdea;
+
+$("clearBtn").onclick=()=>{
+$("userInput").value="";
+$("result").innerText=current().welcome;
+};
+
+$("generateBtn").onclick=async()=>{
+
+const a=current();
+
+const prompt=$("userInput").value.trim();
+
+if(!prompt){
+$("result").innerText=a.empty;
+return;
+}
+
+$("result").innerText=a.loading;
+
+try{
+
+const controller = new AbortController();
+
+setTimeout(()=>controller.abort(),25000);
+
+const r=await fetch("/api/generate",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+prompt,
+languageName:a.name
+}),
+signal:controller.signal
+});
+
+const d=await r.json();
+
+if(!r.ok){
+throw new Error(d.error || "api");
+}
+
+$("result").innerText =
+d.text || d.result || d.message || "Empty response.";
+
+}catch(e){
+
+$("result").innerText=a.error;
+
+}
+
+};
+
+applyLang();
+</script>
+
+</body>
+</html>
