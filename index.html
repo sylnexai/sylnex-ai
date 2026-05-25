@@ -388,7 +388,7 @@ historyData
 </div>
 `).join("");
  }catch(e){
-   $("result").innerText=a.error + a.localAnswer(prompt);
+ $("result").innerText = data.text || data.result || data.message || "Ответ получен, но текст пустой.";
  }
 };
 
