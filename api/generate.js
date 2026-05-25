@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  console.log("API KEY:", process.env.OPENAI_API_KEY);
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Only POST requests allowed" });
