@@ -5,445 +5,193 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#050711" />
 <title>SylNex AI V2</title>
-<style> 
+
+<style>
 :root{
-  --bg:#050711;--glass:rgba(255,255,255,.09);--glass2:rgba(255,255,255,.14);
-  --border:rgba(255,255,255,.14);--text:#fff;--muted:#bfc9ff;
-  --cyan:#00d2ff;--blue:#3a7bd5;--purple:#8a5cff;--pink:#ff00cc;--gold:#ffe97a;
+--glass:rgba(255,255,255,.09);
+--border:rgba(255,255,255,.14);
+--text:#fff;
+--muted:#bfc9ff;
+--cyan:#00d2ff;
+--blue:#3a7bd5;
+--purple:#8a5cff;
+--pink:#ff00cc;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Inter,Arial,sans-serif
+}
+
 body{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;color:var(--text);
-  background:
-    radial-gradient(circle at top left,rgba(0,210,255,.28),transparent 32%),
-    radial-gradient(circle at top right,rgba(255,0,204,.18),transparent 30%),
-    radial-gradient(circle at bottom,#111b45,#050711 70%);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:16px;
+color:var(--text);
+
+background:
+radial-gradient(circle at top left,rgba(0,210,255,.28),transparent 32%),
+radial-gradient(circle at top right,rgba(255,0,204,.18),transparent 30%),
+radial-gradient(circle at bottom,#111b45,#050711 70%);
 }
+
 .app{
-  width:100%;max-width:480px;border:1px solid var(--border);border-radius:34px;
-  background:var(--glass);box-shadow:0 30px 90px rgba(0,0,0,.6);backdrop-filter:blur(22px);
-  padding:24px;position:relative;overflow:hidden;
+width:100%;
+max-width:480px;
+border:1px solid var(--border);
+border-radius:34px;
+background:var(--glass);
+box-shadow:0 30px 90px rgba(0,0,0,.6);
+backdrop-filter:blur(22px);
+padding:24px;
+position:relative;
+overflow:hidden;
 }
-.app:before{content:"";position:absolute;inset:-80px auto auto -80px;width:190px;height:190px;border-radius:50%;background:rgba(0,210,255,.13)}
-.app:after{content:"";position:absolute;right:-90px;bottom:-90px;width:210px;height:210px;border-radius:50%;background:rgba(255,0,204,.10)}
-.content{position:relative;z-index:1}
-.header{text-align:center;margin-bottom:18px}
+
+.content{
+position:relative;
+z-index:1
+}
+
+.header{
+text-align:center;
+margin-bottom:18px
+}
+
 .logo{
-  margin:0 auto 12px;width:66px;height:66px;border-radius:24px;
-  display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:950;
-  background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
-  box-shadow:0 0 38px rgba(0,210,255,.3);
-}
-h1{font-size:34px;letter-spacing:-1.2px;margin-bottom:6px}
-.subtitle{font-size:14px;line-height:1.45;color:var(--muted)}
-select{
-  width:100%;border:none;outline:none;color:white;background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:14px;margin-bottom:14px;font-weight:700;
-}
-select option{background:#111b45;color:white}
-.daily{
-  border-radius:26px;padding:18px;margin-bottom:16px;
-  background:linear-gradient(135deg,rgba(0,198,255,.94),rgba(138,92,255,.94));
-  box-shadow:0 16px 40px rgba(0,198,255,.22);
-}
-.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.45px;font-weight:950;opacity:.92}
-.dailyText{margin-top:8px;font-size:19px;line-height:1.35;font-weight:900}
-.voiceWrap{text-align:center;margin:18px 0 14px}
-.voiceBtn{
-  width:118px;height:118px;border-radius:50%;border:none;color:white;font-size:42px;cursor:pointer;
-  background:linear-gradient(135deg,#ff7a18,var(--pink));
-  box-shadow:0 0 46px rgba(255,0,204,.34), inset 0 0 20px rgba(255,255,255,.16);
-  transition:.18s;
-}
-.voiceBtn:active{transform:scale(.96)}
-.voiceLabel{margin-top:10px;color:var(--muted);font-size:13px;font-weight:800}
-textarea{
-  width:100%;min-height:118px;border:none;outline:none;resize:none;color:white;
-  background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.14);
-  border-radius:24px;padding:16px;font-size:16px;line-height:1.45;margin-bottom:12px;
-}
-textarea::placeholder{color:#aeb9e8}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-button{
-  border:none;border-radius:18px;padding:15px;font-weight:950;font-size:15px;color:white;cursor:pointer;
-  background:rgba(255,255,255,.16);transition:.18s;
-}
-button:active{transform:scale(.97)}
-.primary{
-  grid-column:span 2;background:linear-gradient(135deg,var(--cyan),var(--blue));
-  box-shadow:0 14px 32px rgba(0,210,255,.23);
-}
-.result{
-  min-height:180px;max-height:360px;overflow-y:auto;white-space:pre-wrap;
-  background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.10);
-  border-radius:26px;padding:18px;line-height:1.6;color:#eef3ff;font-size:15px;
-}
-.footer{text-align:center;margin-top:13px;color:#9eaae6;font-size:12px}
-.pulse{animation:pulse 1.2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 34px rgba(255,0,204,.30)}50%{box-shadow:0 0 60px rgba(0,210,255,.42)}100%{box-shadow:0 0 34px rgba(255,0,204,.30)}}
-@media(max-width:380px){h1{font-size:30px}.voiceBtn{width:104px;height:104px}}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="content">
-    <div class="header">
-      <div class="logo">S</div>
-      <h1>SylNex AI</h1>
-      <div class="subtitle" id="subtitle"></div>
-    </div>
+margin:0 auto 12px;
+width:66px;
+height:66px;
+border-radius:24px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+font-weight:950;
 
-    <select id="languageSelect">
-      <option value="en-US">English</option>
-      <option value="ru-RU">Русский</option>
-      <option value="de-DE">Deutsch</option>
-      <option value="uz-UZ">Oʻzbek</option>
-      <option value="tg-TJ">Тоҷикӣ</option>
-      <option value="tr-TR">Türkçe</option>
-      <option value="pl-PL">Polski</option>
-      <option value="fr-FR">Français</option>
-      <option value="ar-SA">العربية</option>
-      <option value="hi-IN">हिन्दी</option>
-      <option value="zh-CN">中文</option>
-    </select>
-
-    <div class="daily">
-      <div class="kicker" id="dailyTitle"></div>
-      <div class="dailyText" id="dailyText"></div>
-    </div>
-
-    <div class="voiceWrap">
-      <button class="voiceBtn" id="voiceBtn">🎙</button>
-      <div class="voiceLabel" id="voiceLabel"></div>
-    </div>
-
-    <textarea id="userInput"></textarea>
-
-    <div class="row">
-      <button id="clearBtn"></button>
-      <button id="newIdeaBtn"></button>
-      <button class="primary" id="generateBtn"></button>
-    </div>
-
-    <div class="result" id="result"></div>
-    <div class="historyBox" id="historyBox"></div>
-    <div class="footer" id="footer"></div>
-  </div>
-</div>
-
-<script>
-const $ = id => document.getElementById(id);
-
-  let historyData = JSON.parse(localStorage.getItem("sylnex_history") || "[]");
-
-const UI = {
- "en-US":{
-  name:"English", subtitle:"Your AI Growth Companion for money ideas, skills and next steps.",
-  dailyTitle:"Daily Opportunity", voiceLabel:"Tap to speak", listening:"Listening...",
-  clear:"Clear", newIdea:"New idea", generate:"Generate plan",
-  placeholder:"Ask about money, work, ideas, documents, language, or your next step...",
-  welcome:"Welcome to SylNex AI.\n\nAsk me what you want to improve, earn, learn or build.",
-  empty:"Write or say what you want to improve, earn, learn or build.",
-  loading:"SylNex is creating a practical plan...",
-  error:"Connection problem. Local demo answer:\n\n",
-  micError:"Microphone error. Please try again.",
-  noVoice:"Voice is not supported in this browser. Try Chrome.",
-  footer:"One small step today can open a new opportunity tomorrow.",
-  ideas:[
-    "Find one simple service you can offer to people near you today.",
-    "Use AI to improve one message, resume, profile or offer.",
-    "Ask one person what problem they need solved this week.",
-    "Turn one skill you already have into a small paid service.",
-    "Learn one useful digital skill for 20 minutes today."
-  ],
-  localAnswer:(q)=>`Here is your SylNex growth plan:\n\n1. Main direction\n${q}\n\n2. Three realistic options\n- Start with one small service you can offer today.\n- Improve your profile, message, resume or offer.\n- Ask people around you what problem they need solved.\n\n3. Simple action plan\nToday: write one clear offer.\nTomorrow: send it to 3 people.\nThis week: test one small paid idea.\n\n4. Do today\nWrite: “I can help with ___ for ___.”\n\nYou do not need a perfect plan. You need one real step.`
- },
- "ru-RU":{
-  name:"Russian", subtitle:"Твой AI-компаньон для идей заработка, навыков и следующих шагов.",
-  dailyTitle:"Возможность дня", voiceLabel:"Нажмите и говорите", listening:"Слушаю...",
-  clear:"Очистить", newIdea:"Новая идея", generate:"Создать план",
-  placeholder:"Спросите про деньги, работу, идеи, документы, язык или следующий шаг...",
-  welcome:"Добро пожаловать в SylNex AI.\n\nСкажи, что хочешь улучшить, заработать, выучить или построить.",
-  empty:"Напишите или скажите, что хотите улучшить, заработать, выучить или построить.",
-  loading:"SylNex создаёт практичный план...",
-  error:"Проблема соединения. Локальный демо-ответ:\n\n",
-  micError:"Ошибка микрофона. Попробуйте ещё раз.",
-  noVoice:"Голос не поддерживается. Попробуйте Chrome.",
-  footer:"Один маленький шаг сегодня может открыть новую возможность завтра.",
-  ideas:[
-    "Найдите одну простую услугу, которую можете предложить людям рядом.",
-    "Используйте AI, чтобы улучшить сообщение, резюме, профиль или предложение.",
-    "Спросите одного человека, какую проблему ему нужно решить на этой неделе.",
-    "Превратите один свой навык в маленькую платную услугу.",
-    "Учите один полезный цифровой навык 20 минут сегодня."
-  ],
-  localAnswer:(q)=>`Вот твой план роста от SylNex:\n\n1. Главное направление\n${q}\n\n2. Три реальные возможности\n- Начни с одной маленькой услуги, которую можешь предложить сегодня.\n- Улучши профиль, сообщение, резюме или предложение.\n- Спроси людей рядом, какую проблему им нужно решить.\n\n3. Простой план\nСегодня: напиши одно понятное предложение.\nЗавтра: отправь его 3 людям.\nНа этой неделе: протестируй одну маленькую идею заработка.\n\n4. Что сделать сегодня\nНапиши: «Я могу помочь с ___ за ___».\n\nТебе не нужен идеальный план. Нужен один реальный шаг.`
- },
- "de-DE":{
-  name:"German", subtitle:"Dein AI-Begleiter für Geldideen, Fähigkeiten und nächste Schritte.",
-  dailyTitle:"Chance des Tages", voiceLabel:"Tippen und sprechen", listening:"Ich höre...",
-  clear:"Löschen", newIdea:"Neue Idee", generate:"Plan erstellen",
-  placeholder:"Frage nach Geld, Arbeit, Ideen, Dokumenten, Sprache oder deinem nächsten Schritt...",
-  welcome:"Willkommen bei SylNex AI.\n\nSag, was du verbessern, verdienen, lernen oder aufbauen möchtest.",
-  empty:"Schreibe oder sage, was du verbessern, verdienen, lernen oder aufbauen möchtest.",
-  loading:"SylNex erstellt einen praktischen Plan...",
-  error:"Verbindungsproblem. Lokale Demo-Antwort:\n\n",
-  micError:"Mikrofonfehler. Bitte erneut versuchen.",
-  noVoice:"Sprache wird nicht unterstützt. Versuche Chrome.",
-  footer:"Ein kleiner Schritt heute kann morgen eine neue Chance öffnen.",
-  ideas:[
-    "Finde heute einen einfachen Service, den du Menschen in deiner Nähe anbieten kannst.",
-    "Nutze AI, um eine Nachricht, einen Lebenslauf, ein Profil oder Angebot zu verbessern.",
-    "Frage eine Person, welches Problem sie diese Woche gelöst haben möchte.",
-    "Mache aus einer Fähigkeit einen kleinen bezahlten Service.",
-    "Lerne heute 20 Minuten eine nützliche digitale Fähigkeit."
-  ],
-  localAnswer:(q)=>`Hier ist dein SylNex Wachstumsplan:\n\n1. Richtung\n${q}\n\n2. Drei realistische Optionen\n- Starte mit einem kleinen Service, den du heute anbieten kannst.\n- Verbessere dein Profil, deine Nachricht, deinen Lebenslauf oder dein Angebot.\n- Frage Menschen in deiner Nähe, welches Problem sie gelöst haben möchten.\n\n3. Einfacher Plan\nHeute: Schreibe ein klares Angebot.\nMorgen: Sende es an 3 Personen.\nDiese Woche: Teste eine kleine bezahlte Idee.\n\n4. Heute tun\nSchreibe: „Ich kann bei ___ für ___ helfen.“\n\nDu brauchst keinen perfekten Plan. Du brauchst einen echten Schritt.`
- },
- "uz-UZ":{
-  name:"Uzbek", subtitle:"Pul gʻoyalari, ko‘nikmalar va keyingi qadamlar uchun AI hamroh.",
-  dailyTitle:"Kunning imkoniyati", voiceLabel:"Bosib gapiring", listening:"Tinglayapman...",
-  clear:"Tozalash", newIdea:"Yangi gʻoya", generate:"Reja yaratish",
-  placeholder:"Pul, ish, gʻoyalar, hujjatlar, til yoki keyingi qadam haqida soʻrang...",
-  welcome:"SylNex AI ga xush kelibsiz.\n\nNimani yaxshilash, topish, o‘rganish yoki qurishni xohlaysiz?",
-  empty:"Nimani yaxshilash, topish, o‘rganish yoki qurishni yozing yoki ayting.",
-  loading:"SylNex amaliy reja yaratmoqda...",
-  error:"Ulanish muammosi. Mahalliy demo javob:\n\n",
-  micError:"Mikrofon xatosi. Qayta urinib ko‘ring.",
-  noVoice:"Ovoz bu brauzerda ishlamaydi. Chrome ni sinab ko‘ring.",
-  footer:"Bugungi kichik qadam ertaga yangi imkoniyat ochishi mumkin.",
-  ideas:[
-    "Bugun atrofingizdagi odamlarga taklif qiladigan oddiy xizmat toping.",
-    "AI yordamida xabar, rezyume, profil yoki taklifingizni yaxshilang.",
-    "Bir odamdan bu hafta qanday muammosini hal qilish kerakligini so‘rang.",
-    "Bor ko‘nikmangizni kichik pullik xizmatga aylantiring.",
-    "Bugun 20 daqiqa foydali raqamli ko‘nikma o‘rganing."
-  ],
-  localAnswer:(q)=>`SylNex rivojlanish rejangiz:\n\n1. Asosiy yo‘nalish\n${q}\n\n2. Uchta real imkoniyat\n- Bugun taklif qila oladigan kichik xizmatdan boshlang.\n- Profil, xabar, rezyume yoki taklifingizni yaxshilang.\n- Atrofdagi odamlardan qanday muammo borligini so‘rang.\n\n3. Oddiy reja\nBugun: aniq taklif yozing.\nErtaga: 3 kishiga yuboring.\nBu hafta: bitta kichik daromad g‘oyasini sinab ko‘ring.\n\n4. Bugun qiling\nYozing: “Men ___ bo‘yicha ___ evaziga yordam bera olaman.”\n\nMukammal reja shart emas. Bitta haqiqiy qadam kerak.`
- },
- "tg-TJ":{
-  name:"Tajik", subtitle:"AI-ҳамроҳ барои идеяҳои даромад, малакаҳо ва қадами оянда.",
-  dailyTitle:"Имконияти рӯз", voiceLabel:"Пахш кунед ва гап занед", listening:"Гӯш мекунам...",
-  clear:"Тоза кардан", newIdea:"Идеяи нав", generate:"Сохтани нақша",
-  placeholder:"Дар бораи пул, кор, идеяҳо, ҳуҷҷатҳо, забон ё қадами оянда пурсед...",
-  welcome:"Хуш омадед ба SylNex AI.\n\nБигӯед, чӣ мехоҳед беҳтар кунед, ба даст оред, омӯзед ё созед.",
-  empty:"Нависед ё гӯед, чӣ мехоҳед беҳтар кунед, ба даст оред, омӯзед ё созед.",
-  loading:"SylNex нақшаи амалӣ месозад...",
-  error:"Мушкили пайвастшавӣ. Ҷавоби демо:\n\n",
-  micError:"Хатои микрофон. Бори дигар кӯшиш кунед.",
-  noVoice:"Овоз дар ин браузер дастгирӣ намешавад. Chrome-ро санҷед.",
-  footer:"Як қадами хурд имрӯз метавонад фардо имконияти нав кушояд.",
-  ideas:[
-    "Имрӯз як хизмати оддиро, ки ба одамони наздик пешниҳод мекунед, пайдо кунед.",
-    "Бо AI як паём, резюме, профил ё пешниҳодро беҳтар кунед.",
-    "Аз як нафар пурсед, ин ҳафта кадом мушкилашро ҳал кардан мехоҳад.",
-    "Як малакаи худро ба хизмати хурди пулакӣ табдил диҳед.",
-    "Имрӯз 20 дақиқа як малакаи рақамии муфид омӯзед."
-  ],
-  localAnswer:(q)=>`Нақшаи рушди SylNex:\n\n1. Самти асосӣ\n${q}\n\n2. Се имконияти воқеӣ\n- Аз як хизмати хурде оғоз кунед, ки имрӯз пешниҳод карда метавонед.\n- Профил, паём, резюме ё пешниҳодатонро беҳтар кунед.\n- Аз одамони наздик пурсед, кадом мушкилро ҳал кардан мехоҳанд.\n\n3. Нақшаи содда\nИмрӯз: як пешниҳоди равшан нависед.\nФардо: онро ба 3 нафар фиристед.\nИн ҳафта: як идеяи хурди даромадро санҷед.\n\n4. Имрӯз чӣ кардан\nНависед: «Ман метавонам дар ___ бо ___ кӯмак кунам».\n\nНақшаи комил лозим нест. Як қадами воқеӣ лозим аст.`
- },
- "tr-TR":{
-  name:"Turkish", subtitle:"Para fikirleri, beceriler ve sonraki adımlar için AI yol arkadaşın.",
-  dailyTitle:"Günün fırsatı", voiceLabel:"Bas ve konuş", listening:"Dinliyorum...",
-  clear:"Temizle", newIdea:"Yeni fikir", generate:"Plan oluştur",
-  placeholder:"Para, iş, fikirler, belgeler, dil veya sonraki adım hakkında sor...",
-  welcome:"SylNex AI’ye hoş geldin.\n\nNeyi geliştirmek, kazanmak, öğrenmek veya kurmak istiyorsun?",
-  empty:"Neyi geliştirmek, kazanmak, öğrenmek veya kurmak istediğini yaz ya da söyle.",
-  loading:"SylNex pratik bir plan oluşturuyor...",
-  error:"Bağlantı sorunu. Yerel demo cevap:\n\n",
-  micError:"Mikrofon hatası. Tekrar dene.",
-  noVoice:"Ses desteklenmiyor. Chrome dene.",
-  footer:"Bugünkü küçük adım yarın yeni bir fırsat açabilir.",
-  ideas:["Bugün yakınındaki insanlara sunabileceğin basit bir hizmet bul.","AI ile bir mesajı, özgeçmişi, profili veya teklifi geliştir.","Bir kişiye bu hafta hangi problemini çözmek istediğini sor.","Sahip olduğun bir beceriyi küçük ücretli hizmete çevir.","Bugün 20 dakika faydalı bir dijital beceri öğren."],
-  localAnswer:(q)=>`SylNex büyüme planın:\n\n1. Ana yön\n${q}\n\n2. Üç gerçekçi seçenek\n- Bugün sunabileceğin küçük bir hizmetle başla.\n- Profilini, mesajını, özgeçmişini veya teklifini geliştir.\n- Çevrendeki insanlara hangi problemi çözmek istediklerini sor.\n\n3. Basit plan\nBugün: net bir teklif yaz.\nYarın: 3 kişiye gönder.\nBu hafta: küçük bir gelir fikrini test et.\n\n4. Bugün yap\nŞunu yaz: “___ konusunda ___ karşılığında yardımcı olabilirim.”\n\nMükemmel plana ihtiyacın yok. Gerçek bir adıma ihtiyacın var.`
- },
- "pl-PL":{
-  name:"Polish", subtitle:"Twój AI towarzysz dla pomysłów na zarobek, umiejętności i kolejnych kroków.",
-  dailyTitle:"Szansa dnia", voiceLabel:"Naciśnij i mów", listening:"Słucham...",
-  clear:"Wyczyść", newIdea:"Nowy pomysł", generate:"Stwórz plan",
-  placeholder:"Zapytaj o pieniądze, pracę, pomysły, dokumenty, język lub następny krok...",
-  welcome:"Witaj w SylNex AI.\n\nNapisz, co chcesz poprawić, zarobić, nauczyć się lub zbudować.",
-  empty:"Napisz lub powiedz, co chcesz poprawić, zarobić, nauczyć się lub zbudować.",
-  loading:"SylNex tworzy praktyczny plan...",
-  error:"Problem z połączeniem. Lokalna odpowiedź demo:\n\n",
-  micError:"Błąd mikrofonu. Spróbuj ponownie.",
-  noVoice:"Głos nie jest obsługiwany. Spróbuj Chrome.",
-  footer:"Jeden mały krok dziś może otworzyć nową szansę jutro.",
-  ideas:["Znajdź dziś prostą usługę, którą możesz zaoferować ludziom blisko Ciebie.","Użyj AI, aby poprawić wiadomość, CV, profil lub ofertę.","Zapytaj jedną osobę, jaki problem chce rozwiązać w tym tygodniu.","Zamień jedną umiejętność w małą płatną usługę.","Ucz się dziś 20 minut jednej przydatnej umiejętności cyfrowej."],
-  localAnswer:(q)=>`Twój plan rozwoju SylNex:\n\n1. Główny kierunek\n${q}\n\n2. Trzy realne opcje\n- Zacznij od małej usługi, którą możesz zaoferować dziś.\n- Popraw profil, wiadomość, CV lub ofertę.\n- Zapytaj ludzi wokół, jaki problem chcą rozwiązać.\n\n3. Prosty plan\nDziś: napisz jasną ofertę.\nJutro: wyślij ją do 3 osób.\nW tym tygodniu: przetestuj jeden mały pomysł na zarobek.\n\n4. Zrób dziś\nNapisz: „Mogę pomóc z ___ za ___”.\n\nNie potrzebujesz idealnego planu. Potrzebujesz jednego prawdziwego kroku.`
- },
- "fr-FR":{
-  name:"French", subtitle:"Ton compagnon AI pour les idées d'argent, les compétences et les prochaines étapes.",
-  dailyTitle:"Opportunité du jour", voiceLabel:"Appuie et parle", listening:"J’écoute...",
-  clear:"Effacer", newIdea:"Nouvelle idée", generate:"Créer un plan",
-  placeholder:"Demande sur l’argent, le travail, les idées, les documents, la langue ou la prochaine étape...",
-  welcome:"Bienvenue sur SylNex AI.\n\nDis ce que tu veux améliorer, gagner, apprendre ou construire.",
-  empty:"Écris ou dis ce que tu veux améliorer, gagner, apprendre ou construire.",
-  loading:"SylNex crée un plan pratique...",
-  error:"Problème de connexion. Réponse démo locale:\n\n",
-  micError:"Erreur de microphone. Réessaie.",
-  noVoice:"La voix n’est pas prise en charge. Essaie Chrome.",
-  footer:"Un petit pas aujourd’hui peut ouvrir une nouvelle opportunité demain.",
-  ideas:["Trouve aujourd’hui un service simple à proposer aux personnes autour de toi.","Utilise AI pour améliorer un message, un CV, un profil ou une offre.","Demande à une personne quel problème elle veut résoudre cette semaine.","Transforme une compétence en petit service payé.","Apprends une compétence digitale utile pendant 20 minutes aujourd’hui."],
-  localAnswer:(q)=>`Voici ton plan de croissance SylNex:\n\n1. Direction principale\n${q}\n\n2. Trois options réalistes\n- Commence par un petit service que tu peux proposer aujourd’hui.\n- Améliore ton profil, message, CV ou offre.\n- Demande aux personnes autour de toi quel problème elles veulent résoudre.\n\n3. Plan simple\nAujourd’hui: écris une offre claire.\nDemain: envoie-la à 3 personnes.\nCette semaine: teste une petite idée payante.\n\n4. À faire aujourd’hui\nÉcris: « Je peux aider avec ___ pour ___ ».\n\nTu n’as pas besoin d’un plan parfait. Tu as besoin d’un vrai pas.`
- },
- "ar-SA":{
-  name:"Arabic", subtitle:"رفيقك بالذكاء الاصطناعي لأفكار المال والمهارات والخطوات القادمة.",
-  dailyTitle:"فرصة اليوم", voiceLabel:"اضغط وتحدث", listening:"أستمع...",
-  clear:"مسح", newIdea:"فكرة جديدة", generate:"إنشاء خطة",
-  placeholder:"اسأل عن المال، العمل، الأفكار، الوثائق، اللغة أو الخطوة التالية...",
-  welcome:"مرحباً بك في SylNex AI.\n\nاكتب ما تريد تحسينه أو كسبه أو تعلمه أو بناؤه.",
-  empty:"اكتب أو قل ما تريد تحسينه أو كسبه أو تعلمه أو بناؤه.",
-  loading:"SylNex ينشئ خطة عملية...",
-  error:"مشكلة في الاتصال. إجابة تجريبية محلية:\n\n",
-  micError:"خطأ في الميكروفون. حاول مرة أخرى.",
-  noVoice:"الصوت غير مدعوم. جرّب Chrome.",
-  footer:"خطوة صغيرة اليوم قد تفتح فرصة جديدة غداً.",
-  ideas:["ابحث اليوم عن خدمة بسيطة يمكنك تقديمها للناس حولك.","استخدم AI لتحسين رسالة أو سيرة ذاتية أو ملف أو عرض.","اسأل شخصاً واحداً عن مشكلة يريد حلها هذا الأسبوع.","حوّل مهارة لديك إلى خدمة صغيرة مدفوعة.","تعلّم مهارة رقمية مفيدة لمدة 20 دقيقة اليوم."],
-  localAnswer:(q)=>`خطة النمو من SylNex:\n\n1. الاتجاه الرئيسي\n${q}\n\n2. ثلاث خيارات واقعية\n- ابدأ بخدمة صغيرة يمكنك تقديمها اليوم.\n- حسّن ملفك أو رسالتك أو سيرتك أو عرضك.\n- اسأل الناس حولك عن مشكلة يريدون حلها.\n\n3. خطة بسيطة\nاليوم: اكتب عرضاً واضحاً.\nغداً: أرسله إلى 3 أشخاص.\nهذا الأسبوع: اختبر فكرة دخل صغيرة.\n\n4. افعل اليوم\nاكتب: “أستطيع المساعدة في ___ مقابل ___”.\n\nلا تحتاج خطة مثالية. تحتاج خطوة حقيقية واحدة.`
- },
- "hi-IN":{
-  name:"Hindi", subtitle:"पैसे के आइडिया, स्किल और अगले कदमों के लिए आपका AI साथी.",
-  dailyTitle:"आज का अवसर", voiceLabel:"दबाकर बोलें", listening:"सुन रहा हूँ...",
-  clear:"साफ करें", newIdea:"नया आइडिया", generate:"प्लान बनाएं",
-  placeholder:"पैसा, काम, आइडिया, दस्तावेज़, भाषा या अगले कदम के बारे में पूछें...",
-  welcome:"SylNex AI में आपका स्वागत है.\n\nलिखें कि आप क्या सुधारना, कमाना, सीखना या बनाना चाहते हैं.",
-  empty:"लिखें या बोलें कि आप क्या सुधारना, कमाना, सीखना या बनाना चाहते हैं.",
-  loading:"SylNex एक practical plan बना रहा है...",
-  error:"Connection problem. Local demo answer:\n\n",
-  micError:"Microphone error. Please try again.",
-  noVoice:"Voice supported नहीं है. Chrome try करें.",
-  footer:"आज का छोटा कदम कल नया अवसर खोल सकता है.",
-  ideas:["आज आसपास के लोगों को देने के लिए एक simple service खोजें.","AI से अपना message, resume, profile या offer सुधारें.","एक व्यक्ति से पूछें कि उसे इस हफ्ते कौन सी problem solve करनी है.","अपनी एक skill को छोटी paid service में बदलें.","आज 20 मिनट एक useful digital skill सीखें."],
-  localAnswer:(q)=>`आपका SylNex growth plan:\n\n1. Main direction\n${q}\n\n2. तीन realistic options\n- आज एक छोटी service से शुरू करें.\n- अपना profile, message, resume या offer सुधारें.\n- आसपास के लोगों से पूछें कि उन्हें कौन सी problem solve करनी है.\n\n3. Simple action plan\nआज: एक clear offer लिखें.\nकल: उसे 3 लोगों को भेजें.\nइस हफ्ते: एक छोटी earning idea test करें.\n\n4. आज करें\nलिखें: “मैं ___ में ___ के लिए help कर सकता/सकती हूँ.”\n\nPerfect plan जरूरी नहीं. एक real step जरूरी है.`
- },
- "zh-CN":{
-  name:"Chinese", subtitle:"你的 AI 成长伙伴，帮助你找到赚钱想法、技能和下一步。",
-  dailyTitle:"今日机会", voiceLabel:"点击说话", listening:"正在听...",
-  clear:"清除", newIdea:"新想法", generate:"生成计划",
-  placeholder:"询问赚钱、工作、想法、文件、语言或下一步...",
-  welcome:"欢迎使用 SylNex AI。\n\n告诉我你想改进、赚钱、学习或建立什么。",
-  empty:"写下或说出你想改进、赚钱、学习或建立什么。",
-  loading:"SylNex 正在创建实用计划...",
-  error:"连接问题。本地演示回答：\n\n",
-  micError:"麦克风错误，请重试。",
-  noVoice:"此浏览器不支持语音，请尝试 Chrome。",
-  footer:"今天的一小步，可能打开明天的新机会。",
-  ideas:["今天找一个可以为附近的人提供的简单服务。","用 AI 改进一条消息、简历、个人资料或报价。","问一个人本周他想解决什么问题。","把你已有的一项技能变成小型付费服务。","今天学习 20 分钟有用的数字技能。"],
-  localAnswer:(q)=>`这是你的 SylNex 成长计划：\n\n1. 主要方向\n${q}\n\n2. 三个现实选择\n- 从今天能提供的小服务开始。\n- 改进你的资料、消息、简历或报价。\n- 问身边的人他们想解决什么问题。\n\n3. 简单行动计划\n今天：写一个清楚的报价。\n明天：发给 3 个人。\n本周：测试一个小的赚钱想法。\n\n4. 今天做\n写：“我可以帮助 ___，价格是 ___。”\n\n你不需要完美计划。你需要一个真实行动。`
- }
-};
-
-function current(){ return UI[$("languageSelect").value] || UI["en-US"]; }
-function randomIdea(){ const a=current(); $("dailyText").innerText = a.ideas[Math.floor(Math.random()*a.ideas.length)]; }
-function applyLang(){
- const a=current();
- document.documentElement.lang = $("languageSelect").value.split("-")[0];
- document.documentElement.dir = $("languageSelect").value==="ar-SA" ? "rtl" : "ltr";
- $("subtitle").innerText=a.subtitle; $("dailyTitle").innerText=a.dailyTitle; $("voiceLabel").innerText=a.voiceLabel;
- $("clearBtn").innerText=a.clear; $("newIdeaBtn").innerText=a.newIdea; $("generateBtn").innerText=a.generate;
- $("userInput").placeholder=a.placeholder; $("result").innerText=a.welcome; $("footer").innerText=a.footer;
- randomIdea();
- localStorage.setItem("sylnex_v2_lang",$("languageSelect").value);
-}
-$("languageSelect").value = localStorage.getItem("sylnex_v2_lang") || "en-US";
-$("languageSelect").addEventListener("change",applyLang);
-
-$("newIdeaBtn").onclick=randomIdea;
-$("clearBtn").onclick=()=>{ $("userInput").value=""; $("result").innerText=current().welcome; };
-
-$("generateBtn").onclick=async()=>{
- const a=current();
- const prompt=$("userInput").value.trim();
- if(!prompt){ $("result").innerText=a.empty; return; }
- $("result").innerText=a.loading;
- try{const controller = new AbortController();
-setTimeout(() => controller.abort(), 25000);
-
-const r = await fetch("/api/generate", {
-  method: "POST",
-  headers: {"Content-Type":"application/json"},
-  body: JSON.stringify({prompt, languageName:a.name}),
-  signal: controller.signal
-});
-     method:"POST",
-     headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({prompt,languageName:a.name})
-   });
-   if(!r.ok) throw new Error("api");
-   const d=await r.json();
-   $("result").innerText=d.text || d.result || d.message || a.localAnswer(prompt);
-   historyData.unshift({
-prompt,
-answer:data.text || data.result || data.message
-});
-
-localStorage.setItem(
-"sylnex_history",
-JSON.stringify(historyData.slice(0,20))
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--purple),
+var(--pink)
 );
 
-$("historyBox").innerHTML =
-historyData
-.slice(0,5)
-.map(item=>`
-<div style="margin-top:12px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.05)">
-<div style="font-size:12px;opacity:.6">You asked:</div>
-<div>${item.prompt}</div>
-<div style="margin-top:8px;font-size:12px;opacity:.6">SylNex:</div>
-<div>${item.answer}</div>
-</div>
-`).join("");
- }catch(e){
- $("result").innerText = data.text || data.result || data.message || "Ответ получен, но текст пустой.";
- }
-};
-
-let recognition=null, listening=false, finalText="";
-if("webkitSpeechRecognition" in window){
- recognition=new webkitSpeechRecognition();
- recognition.continuous=true;
- recognition.interimResults=true;
- $("voiceBtn").onclick=()=>{
-   const a=current();
-   if(listening){
-     recognition.stop();
-     listening=false;
-     $("voiceBtn").classList.remove("pulse");
-     $("voiceLabel").innerText=a.voiceLabel;
-     return;
-   }
-   finalText=$("userInput").value ? $("userInput").value+" " : "";
-   recognition.lang=$("languageSelect").value;
-   listening=true;
-   $("voiceBtn").classList.add("pulse");
-   $("voiceLabel").innerText=a.listening;
-   recognition.start();
- };
- recognition.onresult=(event)=>{
-   let interim="";
-   for(let i=event.resultIndex;i<event.results.length;i++){
-     const txt=event.results[i][0].transcript;
-     if(event.results[i].isFinal) finalText += txt + " ";
-     else interim += txt;
-   }
-   $("userInput").value=(finalText+interim).trim();
- };
- recognition.onerror=()=>{
-   listening=false;
-   $("voiceBtn").classList.remove("pulse");
-   $("voiceLabel").innerText=current().voiceLabel;
-   $("result").innerText=current().micError;
- };
- recognition.onend=()=>{
-   listening=false;
-   $("voiceBtn").classList.remove("pulse");
-   $("voiceLabel").innerText=current().voiceLabel;
- };
-}else{
- $("voiceBtn").onclick=()=>{ $("result").innerText=current().noVoice; };
+box-shadow:0 0 38px rgba(0,210,255,.3);
 }
-applyLang();
-</script>
-</body>
-</html>
+
+h1{
+font-size:34px;
+letter-spacing:-1.2px;
+margin-bottom:6px
+}
+
+.subtitle{
+font-size:14px;
+line-height:1.45;
+color:var(--muted)
+}
+
+select{
+width:100%;
+border:none;
+outline:none;
+color:white;
+background:rgba(255,255,255,.15);
+border:1px solid rgba(255,255,255,.13);
+border-radius:18px;
+padding:14px;
+margin-bottom:14px;
+font-weight:700;
+}
+
+select option{
+background:#111b45;
+color:white
+}
+
+.daily{
+border-radius:26px;
+padding:18px;
+margin-bottom:16px;
+
+background:linear-gradient(
+135deg,
+rgba(0,198,255,.94),
+rgba(138,92,255,.94)
+);
+
+box-shadow:0 16px 40px rgba(0,198,255,.22);
+}
+
+.kicker{
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.45px;
+font-weight:950;
+opacity:.92
+}
+
+.dailyText{
+margin-top:8px;
+font-size:19px;
+line-height:1.35;
+font-weight:900
+}
+
+.voiceWrap{
+text-align:center;
+margin:18px 0 14px
+}
+
+.voiceBtn{
+width:118px;
+height:118px;
+border-radius:50%;
+border:none;
+color:white;
+font-size:42px;
+cursor:pointer;
+
+background:linear-gradient(
+135deg,
+#ff7a18,
+var(--pink)
+);
+
+box-shadow:
+0 0 46px rgba(255,0,204,.34),
+inset 0 0 20px rgba(255,255,255,.16);
+}
+
+.voiceLabel{
+margin-top:10px;
+color:var(--muted);
+font-size:13px;
+font-weight:800
+}
+
+textarea{
+width:100%;
+min-height:118px;
+border:none;
+outline:none;
+resize:none;
+color:white;
+
+background:rgba(0,0,0,.34);
+
+border:1px solid rgba(255,255,255,.14);
+border-radius:24px;
+padding:16px;
+font-size:16px;
+line-height:1.45;
+margin-bottom:12px;
+}
+
+textarea::placeholder{
+color:#aeb9e8
+}
