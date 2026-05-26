@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Only POST requests allowed" });
@@ -41,7 +40,7 @@ export default async function handler(req, res) {
 
     const lang = languageMap[rawLanguage] || languageMap.English;
 
-const systemPrompt = `
+    const systemPrompt = `
 You are SylNex AI — a practical daily AI Growth Companion.
 
 Selected language: ${lang.label}
@@ -82,61 +81,7 @@ ANSWER BEHAVIOR:
 - If the user asks for earning ideas, give realistic beginner-friendly options.
 - If the user is in Germany or Europe, think about real local life, rules, language, documents, transport, job market, and time pressure.
 
-OUTPUT:
-Answer only to the user's current message.
-Make every answer feel useful in real life.
-`;
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-       model: "gpt-4o-mini",
-        temperature: 0.8,
-        presence_penalty: 0.6,
-        frequency_penalty: 0.4,
-        messages: [
-          {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: userPrompt
-          }
-        ]
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(500).json({
-        error: data.error?.message || "OpenAI API error"
-      });
-    }
-
-    const answer =
-      data.choices?.[0]?.message?.content ||
-      "No answer received.";
-
-    return res.status(200).json({
-      result: answer,
-      text: answer,
-      message: answer
-    });
-
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message || "Server error"
-    });
-  }
-}
 VERY IMPORTANT:
-
 Bad response example:
 "Learn skills, try freelancing, improve yourself."
 
@@ -176,3 +121,59 @@ Avoid generic endings like:
 
 The response should feel like:
 a smart tired adult talking honestly to another adult.
+
+OUTPUT:
+Answer only to the user's current message.
+Make every answer feel useful in real life.
+`;
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.8,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.4,
+        messages: [
+          {
+            role: "system",
+            content: systemPrompt
+          },
+          {
+            role: "user",
+            content: userPrompt
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("OpenAI API error:", data);
+      return res.status(500).json({
+        error: data.error?.message || "OpenAI API error"
+      });
+    }
+
+    const answer =
+      data.choices?.[0]?.message?.content ||
+      "No answer received.";
+
+    return res.status(200).json({
+      result: answer,
+      text: answer,
+      message: answer
+    });
+
+  } catch (error) {
+    console.error("Server error:", error);
+    return res.status(500).json({
+      error: error.message || "Server error"
+    });
+  }
+}
